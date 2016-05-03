@@ -54,3 +54,31 @@ def test_starting_board():
   print(init_state)
 
 test_starting_board()
+
+# introduce(). 
+# This function will return a multiline string that introduces your player, 
+# giving its full name (you get to make that up), the names and UWNetIDs of its creators (you), 
+# and (optionally) some words to describe its character.
+
+# nickname(). This function should return a short version of the playing agent's name 
+# (16 characters or fewer). This name will be used to identify the player's 
+# moves in game transcripts.
+
+# makeMove(currentState, currentRemark, timeLimit=10000). This is probably your most important function. 
+# It should return a list of the form [[move, newState], newRemark]. The move is a data item 
+# describing the chosen move, and you may choose to return the empty string for this "". 
+# (It is included for compatibility with possible future versions of this assignment.) 
+# The newState is the result of making the move from the given currentState. It must be a 
+# complete state and not just a board. The currentRemark argument is a string representing a remark 
+# from the opponent on its last move. (This may be ignored, and it's a placeholder for possible use 
+#   in future versions of this assignment.) The timeLimit represents the number of milliseconds available for computing and returning the move.
+# The newRemark to be returned must be a string. During a game, the strings from your agent and 
+# its opponent comprise a dialog. (However, you may simply return a fixed string, such as "Your move!" For extra credit, you may make this more elaborate and context-sensitive, commenting on the current state or the direction in which the game seems to be heading.)
+
+# staticEval(state). This function will perform a static evaluation of the given state. 
+# The value returned should be high if the state is good for WHITE and low if the state is 
+# good for BLACK. Although you may wish to extend the BC_state class to make staticEval a member of 
+# that, it's not necessary, and we do need to be able to call your staticEval function directly, for example using
+
+# import The_Roman_BC_Player as player
+# staticResult = player.stateEval(some_state)    
