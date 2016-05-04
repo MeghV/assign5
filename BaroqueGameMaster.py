@@ -2,15 +2,28 @@
 '''TimedGameMaster.py based on GameMaster.py which in turn is 
  based on code from RunKInARow.py
 
-S. Tanimoto, April 29, 2016.
+S. Tanimoto, May 3
 '''
-# modify so as to get names of players from the command line.
+VERSION = '0.6-BETA'
+
+# Get names of players and time limit from the command line.
+
+import sys
+TIME_PER_MOVE = 0.5 # default time limit is half a second.
+if len(sys.argv) > 1:
+    import importlib    
+    player1 = importlib.import_module(sys.argv[1])
+    player2 = importlib.import_module(sys.argv[2])
+    if len(sys.argv) > 3:
+        TIME_PER_MOVE = float(sys.argv[3])
+else:
+    import TestAgent1 as player1
+    import TestAgent1 as player2
+
+
 # Specify details of a match here: 
-import TestAgent1 as player1
-import TestAgent1 as player2
 
 import baroque_succ as bcs
-TIME_PER_MOVE = 0.5
 
 VALIDATE_MOVES = True # If players are trusted not to cheat, this could be turned off to save time.
 
@@ -22,6 +35,7 @@ CURRENT_PLAYER = bcs.WHITE
 FINISHED = False
 def runGame():
     currentState = bcs.BC_state()
+    print('Baroque Chess Gamemaster v'+VERSION)
     print('The Gamemaster says, "Players, introduce yourselves."')
     print('     (Playing WHITE:) '+player1.introduce())
     print('     (Playing BLACK:) '+player2.introduce())
@@ -52,7 +66,7 @@ def runGame():
     name = None
     global FINISHED
     FINISHED = False
-    turnCount = 0
+    turnCount = 1
     print(currentState)
     while not FINISHED:
         who = currentState.whose_move
@@ -78,7 +92,7 @@ def runGame():
         move, currentState = moveAndState
         side = 'BLACK'
         if who==bcs.WHITE: side = 'WHITE'
-        moveReport = "Move is by "+side+" to "+str(move)
+        moveReport = "Turn "+str(turnCount)+": Move is by "+side+" to "+str(move)
         print(moveReport)
         utteranceReport = name +' says: '+currentRemark
         print(utteranceReport)
@@ -116,7 +130,7 @@ def timeout(func, args=(), kwargs={}, timeout_duration=1, default=None):
                 self.result = default
 
     pt = PlayerThread()
-    print("timeout_duration = "+str(timeout_duration))
+    #print("timeout_duration = "+str(timeout_duration))
     pt.start()
     started_at = time.time()
     #print("makeMove started at: " + str(started_at))
@@ -124,7 +138,7 @@ def timeout(func, args=(), kwargs={}, timeout_duration=1, default=None):
     ended_at = time.time()
     #print("makeMove ended at: " + str(ended_at))
     diff = ended_at - started_at
-    print("Time used in makeMove: %0.4f seconds" % diff)
+    print("Time used in makeMove: %0.4f seconds out of " % diff, timeout_duration)
     if pt.isAlive():
         print("Took too long.")
         print("We are now terminating the game.")
