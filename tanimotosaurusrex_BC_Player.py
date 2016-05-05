@@ -55,14 +55,15 @@ def test_starting_board():
 
 test_starting_board()
 
-# introduce(). 
-# This function will return a multiline string that introduces your player, 
-# giving its full name (you get to make that up), the names and UWNetIDs of its creators (you), 
-# and (optionally) some words to describe its character.
+def introduce():
+  # Returns a string that introduces the Baroque Chess playing agent.
+  return "I AM TANIMOTOSAURUS REX, THE WORLD'S BEST BAROQUE CHESS PLAYER!\n" +\
+          "MY CREATORS ARE RYAN CHUI (rchui) AND MEGH VAKHARIA (meghv). LET'S RUMBLEEEEEE!"
 
-# nickname(). This function should return a short version of the playing agent's name 
-# (16 characters or fewer). This name will be used to identify the player's 
-# moves in game transcripts.
+
+def nickname():
+  # Returns the nickname of the Baroque Chess playing agent.
+  return "Tanimotosaurus"
 
 # makeMove(currentState, currentRemark, timeLimit=10000). This is probably your most important function. 
 # It should return a list of the form [[move, newState], newRemark]. The move is a data item 
