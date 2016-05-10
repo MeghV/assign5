@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 from random import *
+=======
+# Immobilized Pieces
+>>>>>>> origin/master
 
 BLACK = 0
 WHITE = 1
@@ -8,6 +12,8 @@ INIT_TO_CODE = {'p':2, 'P':3, 'c':4, 'C':5, 'l':6, 'L':7, 'i':8, 'I':9,
 
 CODE_TO_INIT = {0:'-',2:'p',3:'P',4:'c',5:'C',6:'l',7:'L',8:'i',9:'I',
   10:'w',11:'W',12:'k',13:'K',14:'f',15:'F'}
+
+LAST_MOVE = ""
 
 def who(piece): return piece % 2
 
@@ -61,21 +67,203 @@ def introduce():
   return "I AM TANIMOTOSAURUS REX, THE WORLD'S BEST BAROQUE CHESS PLAYER!\n" +\
           "MY CREATORS ARE RYAN CHUI (rchui) AND MEGH VAKHARIA (meghv). LET'S RUMBLEEEEEE!"
 
-
 def nickname():
   # Returns the nickname of the Baroque Chess playing agent.
   return "Tanimotosaurus"
 
-# makeMove(currentState, currentRemark, timeLimit=10000). This is probably your most important function. 
-# It should return a list of the form [[move, newState], newRemark]. The move is a data item 
-# describing the chosen move, and you may choose to return the empty string for this "". 
-# (It is included for compatibility with possible future versions of this assignment.) 
-# The newState is the result of making the move from the given currentState. It must be a 
-# complete state and not just a board. The currentRemark argument is a string representing a remark 
-# from the opponent on its last move. (This may be ignored, and it's a placeholder for possible use 
-#   in future versions of this assignment.) The timeLimit represents the number of milliseconds available for computing and returning the move.
-# The newRemark to be returned must be a string. During a game, the strings from your agent and 
-# its opponent comprise a dialog. (However, you may simply return a fixed string, such as "Your move!" For extra credit, you may make this more elaborate and context-sensitive, commenting on the current state or the direction in which the game seems to be heading.)
+def prepare(nickname):
+    pass
+
+def DEEP_COPY(old):
+  new = []
+  for i in old:
+    temp = []
+    for j in i:
+      temp.append(j)
+    new.append(temp)
+  return new
+
+def DEEP_EQUALS(list1, list2):
+  new1 = DEEP_COPY(list1)
+  new2 = DEEP_COPY(list2)
+  if new1 == new2:
+    return True
+  else:
+    return False
+
+def move(s, row, column, move_to):
+  print("move")
+  hold = s[row][column]
+  s[row][column] = 0
+  # Pawns
+  if hold in [2, 3]:
+    print ("Is Pawn")
+    if clear_path_vertical(s, row, column, move_to, column):
+      s[row][column] = 0
+      s[move_to][column] = hold
+    elif clear_path_horizontal(s, row, column, row, move_to):
+      s[row][column] = 0
+      s[row][move_to] = hold
+  # Kings
+  elif hold in [13, 14]:
+    print ("Is King")
+    if s[row + 1][column] == 0:
+      s[row + 1][column] = hold
+    elif s[row + 1][column + 1] == 0:
+      s[row + 1][column + 1] = hold
+    elif s[row + 1][column - 1] == 0:
+      s[row + 1][column - 1] = hold
+    elif s[row][column + 1] == 0:
+      s[row][column + 1] = hold
+    elif s[row][column - 1] == 0:
+      s[row][column - 1] = hold
+    elif s[row - 1][column] == 0:
+      s[row - 1][column] = hold
+    elif s[row - 1][column + 1] == 0:
+      s[row - 1][column + 1] = hold
+    elif s[row - 1][column - 1] == 0:
+      s[row - 1][column - 1] = hold
+  # All other pieces
+  else:
+    print ("else")
+    if clear_path_vertical(s, row, column, move_to, column):
+      s[move_to][column] = hold
+      print ("a")
+    elif clear_path_horizontal(s, row, column, row, move_to):
+      s[row][move_to] = hold
+      print ("b")
+    print ("f")
+    if row - move_to >= 0 and column - move_to >= 0:
+      print ("c")
+      if clear_path_diagonal(s, row, column, row - move_to, column - move_to):
+        s[row - move_to][column - move_to] = hold
+      print ("1")
+    elif row + move_to < 8 and column - move_to >= 0:
+      print ("l")
+      if clear_path_diagonal(s, row, column, row + move_to, column - move_to):
+        s[row + move_to, column - move_to] = hold
+      print ("2")
+    elif row - move_to >= 0 and column + move_to < 8:
+      if clear_path_diagonal(s, row, column, row - move_to, column + move_to):
+        s[r - move_to, column + move_to] = hold
+      print ("3")
+    elif row + move_to < 8 and column + move_to < 8:
+      if clear_path_diagonal(s, row, column, row + move_to, column + move_to):
+        s[r + move_to, column + move_to]
+      print ("4")
+    print ("end")
+  print ("returning")
+  return s
+
+# Checks that the horizontal path is clear.
+def clear_path_horizontal(s, from_row, from_column, to_row, to_column):
+  check_row = from_row
+  while from_row != to_row:
+    if from_row > to_row:
+      check_row -= 1
+    else:
+      check_row += 1
+    if s[check_row, from_column] != 0:
+      return False
+  return True
+
+# Chceks that the vertical path is clear.
+def clear_path_vertical(s, from_row, from_column, to_row, to_column):
+  check_column = from_column
+  while from_column != to_column:
+    if from_column > to_column:
+      check_column -= 1
+    else:
+      check_column += 1
+    if s[from_row, check_column] != 0:
+      return False
+  return True
+
+# Checks that the diagonal path is clear.
+def clear_path_diagonal(s, from_row, from_column, to_row, to_column):
+  check_row = from_row
+  check_column = from_column
+  while from_row != to_row and from_column != to_column:
+    if from_row > to_row:
+      check_row -= 1
+    else:
+      check_row += 1
+    if from_column > to_column:
+      check_column -= 1
+    else:
+      check_column += 1
+    if s[check_row, check_column] != 0:
+      return False
+  return True
+
+# Checks that there are empty spaces around the piece.
+def can_move(s, row, column):
+  print ("can_move")
+  if row + 1 < 8 and s[row + 1][column] == 0:
+    return True
+  if column + 1 < 8 and s[row][column + 1] == 0:
+    return True
+  if column - 1 >= 0 and s[row][column - 1] == 0:
+    return True
+  if row - 1 >= 0 and s[row - 1][column] == 0:
+    return True
+  if s[row][column] not in [2, 3]:
+    if row + 1 < 8 and column + 1 < 8 and s[row + 1][column + 1] == 0:
+      return True
+    if row - 1 >= 0 and column + 1 < 8 and s[row - 1][column + 1] == 0:
+      return True
+    if row + 1 < 8 and column - 1 >= 0 and s[row + 1][column - 1] == 0:
+      return True
+    if row - 1 >= 0 and column - 1 >= 0 and s[row - 1][column - 1] == 0:
+      return True
+  return False
+
+# Checks to see if the board has already occured.
+def occurs_in(new_state, test_list):
+  for i in test_list:
+    if DEEP_EQUALS(new_state, i):
+      return True
+  return False
+
+# Makes unique Hashcode for board state.
+def HASHCODE(s):
+  resp = ""
+  for i in s[:-1]:
+    resp += str(i) + ";"
+  resp += str(s[-1])
+  return resp
+
+# Iterative Deepening to find the optimal board move.
+def makeMove(currentState, currentRemark, timeLimit = 10000):
+  LAST_MOVE = BC_state(currentState.board, currentState.whose_move)
+  new = DEEP_COPY(currentState.board)
+  OPEN = [new]
+  CLOSED = {}
+
+  while OPEN != []:
+    S = OPEN[0]
+    del OPEN[0]
+
+    L = []
+    for i in range(8):
+      for j in range(8):
+        if S[i][i] != 0:
+          if can_move(S, i, j):
+            for k in range(8):
+              new_state = move(S, i, j, k)
+              if not occurs_in(HASHCODE(new_state), CLOSED.keys()):
+                L.append(new_state)
+
+    for i in L:
+      CLOSED[HASHCODE(i)] = S
+      for j in range(len(OPEN)):
+        if DEEP_EQUALS(i, OPEN[j]):
+          del OPEN[j]; break
+
+    OPEN = OPEN + L
+
+
+  return [["", currentState], "RAWR! YOUR MOVE PUNY HUMAN!"]
 
 # 14 x 64 table to represent the different pieces
 # (7 on each side) as well as the different positions
