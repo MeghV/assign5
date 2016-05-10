@@ -1,5 +1,4 @@
 from random import *
-import numpy.argmax
 
 # Immobilized Pieces
 # Black White move checker
@@ -92,74 +91,10 @@ def DEEP_EQUALS(list1, list2):
   else:
     return False
 
-def move(s, row, column, move_to):
-  hold = s[row][column]
-  # Pawns
-  if hold in [2, 3]:
-    if clear_path_vertical(s, row, column, move_to, column):
-      if s[move_to][column] == 0:
-        s[move_to][column] = hold
-        s[row][column] = 0
-    elif clear_path_horizontal(s, row, column, row, move_to):
-      if s[row][move_to] == 0:
-        s[row][move_to] = hold
-        s[row][column] = 0
-  # Kings
-  elif hold in [13, 14]:
-    if row + 1 < 8 and s[row + 1][column] == 0:
-      s[row + 1][column] = hold
-      s[row][column] = 0
-    elif row + 1 < 8 and column + 1 < 8 and s[row + 1][column + 1] == 0:
-      s[row + 1][column + 1] = hold
-      s[row][column] = 0
-    elif row + 1 < 8 and column - 1 >= 0 and s[row + 1][column - 1] == 0:
-      s[row + 1][column - 1] = hold
-      s[row][column] = 0
-    elif column + 1 < 8 and s[row][column + 1] == 0:
-      s[row][column + 1] = hold
-      s[row][column] = 0
-    elif column - 1 >= 0 and s[row][column - 1] == 0:
-      s[row][column - 1] = hold
-      s[row][column] = 0
-    elif row - 1 >= 0 and s[row - 1][column] == 0:
-      s[row - 1][column] = hold
-      s[row][column] = 0
-    elif row - 1 >= 0 and column + 1 < 8 and s[row - 1][column + 1] == 0:
-      s[row - 1][column + 1] = hold
-      s[row][column] = 0
-    elif row - 1 >= 0 and column - 1 >= 0 and s[row - 1][column - 1] == 0:
-      s[row - 1][column - 1] = hold
-      s[row][column] = 0
-  # All other pieces
-  else:
-    if clear_path_vertical(s, row, column, move_to, column):
-      if s[move_to][column] == 0:
-        s[move_to][column] = hold
-        s[row][column] = 0
-    elif clear_path_horizontal(s, row, column, row, move_to):
-      if s[row][move_to] == 0:
-        s[row][move_to] = hold
-        s[row][column] = 0
-    if row - move_to >= 0 and column - move_to >= 0:
-      if clear_path_diagonal(s, row, column, row - move_to, column - move_to):
-        if s[row - move_to][column - move_to] == 0:
-          s[row - move_to][column - move_to] = hold
-          s[row][column] = 0
-    elif row + move_to < 8 and column - move_to >= 0:
-      if clear_path_diagonal(s, row, column, row + move_to, column - move_to):
-        if s[row + move_to][column - move_to] == 0:
-          s[row + move_to][column - move_to] = hold
-          s[row][column] = 0
-    elif row - move_to >= 0 and column + move_to < 8:
-      if clear_path_diagonal(s, row, column, row - move_to, column + move_to):
-        if s[row - move_to][column + move_to] == 0:
-          s[row - move_to][column + move_to] = hold
-          s[row][column] = 0
-    elif row + move_to < 8 and column + move_to < 8:
-      if clear_path_diagonal(s, row, column, row + move_to, column + move_to):
-        if s[row + move_to][column + move_to] == 0:
-          s[row + move_to][column + move_to] = hold
-          s[row][column] = 0
+def move(s, from_row, from_column, to_row, to_column):
+  hold = s[from_row][from_column]
+  s[from_row][from_column] = 0
+  s[to_row][to_column] = hold
   return s
 
 # Checks that the horizontal path is clear.
@@ -190,8 +125,6 @@ def clear_path_vertical(s, from_row, from_column, to_row, to_column):
 def clear_path_diagonal(s, from_row, from_column, to_row, to_column):
   check_row = from_row
   check_column = from_column
-  print (to_row)
-  print (to_column)
   while check_row != to_row and check_column != to_column:
     if from_row > to_row:
       check_row -= 1
@@ -206,24 +139,22 @@ def clear_path_diagonal(s, from_row, from_column, to_row, to_column):
   return True
 
 # Checks that there are empty spaces around the piece.
-def can_move(s, row, column):
-  if row + 1 < 8 and s[row + 1][column] == 0:
-    return True
-  if column + 1 < 8 and s[row][column + 1] == 0:
-    return True
-  if column - 1 >= 0 and s[row][column - 1] == 0:
-    return True
-  if row - 1 >= 0 and s[row - 1][column] == 0:
-    return True
-  if s[row][column] not in [2, 3]:
-    if row + 1 < 8 and column + 1 < 8 and s[row + 1][column + 1] == 0:
-      return True
-    if row - 1 >= 0 and column + 1 < 8 and s[row - 1][column + 1] == 0:
-      return True
-    if row + 1 < 8 and column - 1 >= 0 and s[row + 1][column - 1] == 0:
-      return True
-    if row - 1 >= 0 and column - 1 >= 0 and s[row - 1][column - 1] == 0:
-      return True
+def can_move(s, from_row, from_column, to_row, to_column):
+  if s[to_row][to_column] == 0 and (from_row != to_row and from_column != to_column):
+    if s[from_row][from_column] in [12, 13]:
+      if (abs(from_row - to_row) <= 1) and (abs(from_column - to_column) <= 1):
+        return True
+      return False
+    if (from_row == to_row):
+      if clear_path_horizontal(s, from_row, from_column, to_row, to_column):
+        return True
+    elif (from_column == to_column):
+      if clear_path_vertical(s, from_row, from_column, to_row, to_column):
+        return True
+    elif s[from_row][from_column] not in [2, 3]:
+      if (abs(from_row - to_row) == abs(from_column - to_column)):
+        if clear_path_diagonal(s, from_row, from_column, to_row, to_column):
+          return True
   return False
 
 # Checks to see if the board has already occured.
@@ -257,12 +188,14 @@ move_combinations = []
 for i in range(8):
   for j in range(8):
     for k in range(8):
-      move_combinations.append((i, j, k))
+      for l in range(8):
+        move_combinations.append((i, j, k, l))
+print (move_combinations)
 
-OPERATORS = [Operator("Move piece at " + str(p) + ", " + str(q) + " " + str(o) + "spaces",
-                      lambda s, p = p, q = q: can_move(s, p, q),
-                      lambda s, p = p, q = q: move(s, p, q, o))
-                      for (p, q, o) in move_combinations]
+OPERATORS = [Operator("Move piece at " + str(p) + ", " + str(q) + " to " + str(m) + ", " + str(n),
+                      lambda s, p = p, q = q, m = m, n = n: can_move(s, p, q, m, n),
+                      lambda s, p = p, q = q, m = m, n = n: move(s, p, q, m, n))
+                      for (p, q, m, n) in move_combinations]
 
 # Iterative Deepening to find the optimal board move.
 def makeMove(currentState, currentRemark, timeLimit = 10000):
@@ -278,10 +211,9 @@ def makeMove(currentState, currentRemark, timeLimit = 10000):
       if op.precond(S):
         new_state = op.state_transf(S)
         L.append(new_state)
-        print(pretty_print_state(new_state))
     return L
 
-  print (successors(last_board))
+  first_moves = successors(last_board)
 
   def max_value(state, alpha, beta, depth):
     if depth > 4:
