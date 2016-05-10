@@ -1,6 +1,5 @@
-# tanimotosaurusrex_BC_Player
-
 from random import *
+import numpy.argmax
 
 # Immobilized Pieces
 # Black White move checker
@@ -94,11 +93,9 @@ def DEEP_EQUALS(list1, list2):
     return False
 
 def move(s, row, column, move_to):
-  print("move")
   hold = s[row][column]
   # Pawns
   if hold in [2, 3]:
-    print ("Is Pawn")
     if clear_path_vertical(s, row, column, move_to, column):
       if s[move_to][column] == 0:
         s[move_to][column] = hold
@@ -109,7 +106,6 @@ def move(s, row, column, move_to):
         s[row][column] = 0
   # Kings
   elif hold in [13, 14]:
-    print ("Is King")
     if row + 1 < 8 and s[row + 1][column] == 0:
       s[row + 1][column] = hold
       s[row][column] = 0
@@ -136,7 +132,6 @@ def move(s, row, column, move_to):
       s[row][column] = 0
   # All other pieces
   else:
-    print ("Is Else")
     if clear_path_vertical(s, row, column, move_to, column):
       if s[move_to][column] == 0:
         s[move_to][column] = hold
@@ -165,7 +160,6 @@ def move(s, row, column, move_to):
         if s[row + move_to][column + move_to] == 0:
           s[row + move_to][column + move_to] = hold
           s[row][column] = 0
-  print (s)
   return s
 
 # Checks that the horizontal path is clear.
@@ -194,7 +188,6 @@ def clear_path_vertical(s, from_row, from_column, to_row, to_column):
 
 # Checks that the diagonal path is clear.
 def clear_path_diagonal(s, from_row, from_column, to_row, to_column):
-  print ("diag")
   check_row = from_row
   check_column = from_column
   print (to_row)
@@ -214,7 +207,6 @@ def clear_path_diagonal(s, from_row, from_column, to_row, to_column):
 
 # Checks that there are empty spaces around the piece.
 def can_move(s, row, column):
-  print ("can_move")
   if row + 1 < 8 and s[row + 1][column] == 0:
     return True
   if column + 1 < 8 and s[row][column + 1] == 0:
@@ -249,17 +241,70 @@ def HASHCODE(s):
   resp += str(s[-1])
   return resp
 
+class Operator:
+  def __init__(self, name, precond, state_transf):
+    self.name = name
+    self.precond = precond
+    self.state_transf = state_transf
+
+  def is_applicable(self, s):
+    return self.precond(s)
+
+  def apply(self, s):
+    return self.state_transf(s)
+
+move_combinations = []
+for i in range(8):
+  for j in range(8):
+    for k in range(8):
+      move_combinations.append((i, j, k))
+
+OPERATORS = [Operator("Move piece at " + str(p) + ", " + str(q) + " " + str(o) + "spaces",
+                      lambda s, p = p, q = q: can_move(s, p, q),
+                      lambda s, p = p, q = q: move(s, p, q, o))
+                      for (p, q, o) in move_combinations]
+
 # Iterative Deepening to find the optimal board move.
 def makeMove(currentState, currentRemark, timeLimit = 10000):
   LAST_MOVE = BC_state(currentState.board, currentState.whose_move)
+  last_board = DEEP_COPY(currentState.board)
 
   player = currentState.whose_move
 
+  def successors(state):
+    S = state
+    L = []
+    for op in OPERATORS:
+      if op.precond(S):
+        new_state = op.state_transf(S)
+        L.append(new_state)
+        print(pretty_print_state(new_state))
+    return L
+
+  print (successors(last_board))
+
   def max_value(state, alpha, beta, depth):
+    if depth > 4:
+      return staticEval(state)
+    v = -infinity
+    for s in successors(state):
+      v = max(v, min_value(s, alpha, beta, depth + 1))
+      if v >= beta:
+        return v
+      alpha = max(alpha, v)
+    return v
 
   def min_value(state, alpha, beta, depth):
-
-  cutoff = lambda state, depth: depth > 4
+    if depth > 4:
+      return staticEval(state)
+    v = -infinity
+    for s in successors(state):
+      v = min(v, max_value(s, alpha, beta, depth + 1))
+      if v <= alpha:
+        return v
+      beta = min(beta, v)
+    return v
+  
   # new = DEEP_COPY(currentState.board)
   # OPEN = [new]
   # CLOSED = {}
@@ -285,7 +330,6 @@ def makeMove(currentState, currentRemark, timeLimit = 10000):
   #         del OPEN[j]; break
 
   #   OPEN = L + OPEN
-
 
   return [["", currentState], "RAWR! YOUR MOVE PUNY HUMAN!"]
 
@@ -354,30 +398,9 @@ def get_transposition_table_value(zobrist_hash):
     return PREVIOUS_STATES[zobrist_hash]
   return None
 
-PIECE_VALUES = {
-  "2": -100,   # Black / Pawn
-  "3":  100,   # White / Pawn
-  "4": -250,   # Black / Coordinator
-  "5":  250,   # White / Coordinator
-  "6": -300,   # Black / Leaper
-  "7":  300,   # White / Leaper
-  "8": -350,   # Black / Imitator
-  "9":  350,   # White / Imitator
-  "10": -500,  # Black / Withdrawer
-  "11":  500,  # White / Withdrawer
-  "12": -10000,  # Black / King
-  "13":  10000,  # White / King
-  "14": -750,  # Black / Immobilizer
-  "15": 750  # White / Immobilizer
-}
-
 def staticEval(state):
-  score = 0
-  for row in state:
-    for piece in row:
-      if piece != 0:
-        score += PIECE_VALUES[str(piece)]
-  return score
+  # TODO
+  return randint(0, 100)
 
 
 def pretty_print_state(state):
