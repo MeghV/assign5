@@ -1,8 +1,6 @@
-<<<<<<< HEAD
 from random import *
-=======
+
 # Immobilized Pieces
->>>>>>> origin/master
 
 BLACK = 0
 WHITE = 1
