@@ -1,8 +1,9 @@
-# tanimotosaurusrex_BC_Player
-
 from random import *
+import numpy.argmax
 
 # Immobilized Pieces
+# Black White move checker
+# Finding best move
 
 BLACK = 0
 WHITE = 1
@@ -92,11 +93,9 @@ def DEEP_EQUALS(list1, list2):
     return False
 
 def move(s, row, column, move_to):
-  print("move")
   hold = s[row][column]
   # Pawns
   if hold in [2, 3]:
-    print ("Is Pawn")
     if clear_path_vertical(s, row, column, move_to, column):
       if s[move_to][column] == 0:
         s[move_to][column] = hold
@@ -107,57 +106,60 @@ def move(s, row, column, move_to):
         s[row][column] = 0
   # Kings
   elif hold in [13, 14]:
-    print ("Is King")
-    if s[row + 1][column] == 0:
+    if row + 1 < 8 and s[row + 1][column] == 0:
       s[row + 1][column] = hold
       s[row][column] = 0
-    elif s[row + 1][column + 1] == 0:
+    elif row + 1 < 8 and column + 1 < 8 and s[row + 1][column + 1] == 0:
       s[row + 1][column + 1] = hold
       s[row][column] = 0
-    elif s[row + 1][column - 1] == 0:
+    elif row + 1 < 8 and column - 1 >= 0 and s[row + 1][column - 1] == 0:
       s[row + 1][column - 1] = hold
       s[row][column] = 0
-    elif s[row][column + 1] == 0:
+    elif column + 1 < 8 and s[row][column + 1] == 0:
       s[row][column + 1] = hold
       s[row][column] = 0
-    elif s[row][column - 1] == 0:
+    elif column - 1 >= 0 and s[row][column - 1] == 0:
       s[row][column - 1] = hold
       s[row][column] = 0
-    elif s[row - 1][column] == 0:
+    elif row - 1 >= 0 and s[row - 1][column] == 0:
       s[row - 1][column] = hold
       s[row][column] = 0
-    elif s[row - 1][column + 1] == 0:
+    elif row - 1 >= 0 and column + 1 < 8 and s[row - 1][column + 1] == 0:
       s[row - 1][column + 1] = hold
       s[row][column] = 0
-    elif s[row - 1][column - 1] == 0:
+    elif row - 1 >= 0 and column - 1 >= 0 and s[row - 1][column - 1] == 0:
       s[row - 1][column - 1] = hold
       s[row][column] = 0
   # All other pieces
   else:
-    print ("Is Else")
     if clear_path_vertical(s, row, column, move_to, column):
-      s[move_to][column] = hold
-      s[row][column] = 0
+      if s[move_to][column] == 0:
+        s[move_to][column] = hold
+        s[row][column] = 0
     elif clear_path_horizontal(s, row, column, row, move_to):
-      s[row][move_to] = hold
-      s[row][column] = 0
+      if s[row][move_to] == 0:
+        s[row][move_to] = hold
+        s[row][column] = 0
     if row - move_to >= 0 and column - move_to >= 0:
       if clear_path_diagonal(s, row, column, row - move_to, column - move_to):
-        s[row - move_to][column - move_to] = hold
-        s[row][column] = 0
+        if s[row - move_to][column - move_to] == 0:
+          s[row - move_to][column - move_to] = hold
+          s[row][column] = 0
     elif row + move_to < 8 and column - move_to >= 0:
       if clear_path_diagonal(s, row, column, row + move_to, column - move_to):
-        s[row + move_to][column - move_to] = hold
-        s[row][column] = 0
+        if s[row + move_to][column - move_to] == 0:
+          s[row + move_to][column - move_to] = hold
+          s[row][column] = 0
     elif row - move_to >= 0 and column + move_to < 8:
       if clear_path_diagonal(s, row, column, row - move_to, column + move_to):
-        s[row - move_to][column + move_to] = hold
-        s[row][column] = 0
+        if s[row - move_to][column + move_to] == 0:
+          s[row - move_to][column + move_to] = hold
+          s[row][column] = 0
     elif row + move_to < 8 and column + move_to < 8:
       if clear_path_diagonal(s, row, column, row + move_to, column + move_to):
-        s[row + move_to][column + move_to] = hold
-        s[row][column] = 0
-  print (s)
+        if s[row + move_to][column + move_to] == 0:
+          s[row + move_to][column + move_to] = hold
+          s[row][column] = 0
   return s
 
 # Checks that the horizontal path is clear.
@@ -186,7 +188,6 @@ def clear_path_vertical(s, from_row, from_column, to_row, to_column):
 
 # Checks that the diagonal path is clear.
 def clear_path_diagonal(s, from_row, from_column, to_row, to_column):
-  print ("diag")
   check_row = from_row
   check_column = from_column
   print (to_row)
@@ -206,7 +207,6 @@ def clear_path_diagonal(s, from_row, from_column, to_row, to_column):
 
 # Checks that there are empty spaces around the piece.
 def can_move(s, row, column):
-  print ("can_move")
   if row + 1 < 8 and s[row + 1][column] == 0:
     return True
   if column + 1 < 8 and s[row][column + 1] == 0:
@@ -241,34 +241,95 @@ def HASHCODE(s):
   resp += str(s[-1])
   return resp
 
+class Operator:
+  def __init__(self, name, precond, state_transf):
+    self.name = name
+    self.precond = precond
+    self.state_transf = state_transf
+
+  def is_applicable(self, s):
+    return self.precond(s)
+
+  def apply(self, s):
+    return self.state_transf(s)
+
+move_combinations = []
+for i in range(8):
+  for j in range(8):
+    for k in range(8):
+      move_combinations.append((i, j, k))
+
+OPERATORS = [Operator("Move piece at " + str(p) + ", " + str(q) + " " + str(o) + "spaces",
+                      lambda s, p = p, q = q: can_move(s, p, q),
+                      lambda s, p = p, q = q: move(s, p, q, o))
+                      for (p, q, o) in move_combinations]
+
 # Iterative Deepening to find the optimal board move.
 def makeMove(currentState, currentRemark, timeLimit = 10000):
   LAST_MOVE = BC_state(currentState.board, currentState.whose_move)
-  new = DEEP_COPY(currentState.board)
-  OPEN = [new]
-  CLOSED = {}
+  last_board = DEEP_COPY(currentState.board)
 
-  while OPEN != []:
-    S = OPEN[0]
-    del OPEN[0]
+  player = currentState.whose_move
 
+  def successors(state):
+    S = state
     L = []
-    for i in range(8):
-      for j in range(8):
-        if S[i][i] != 0:
-          if can_move(S, i, j):
-            for k in range(8):
-              new_state = move(S, i, j, k)
-              if not occurs_in(HASHCODE(new_state), CLOSED.keys()):
-                L.append(new_state)
+    for op in OPERATORS:
+      if op.precond(S):
+        new_state = op.state_transf(S)
+        L.append(new_state)
+        print(pretty_print_state(new_state))
+    return L
 
-    for i in L:
-      CLOSED[HASHCODE(i)] = S
-      for j in range(len(OPEN)):
-        if DEEP_EQUALS(i, OPEN[j]):
-          del OPEN[j]; break
-    OPEN = OPEN + L
+  print (successors(last_board))
 
+  def max_value(state, alpha, beta, depth):
+    if depth > 4:
+      return staticEval(state)
+    v = -infinity
+    for s in successors(state):
+      v = max(v, min_value(s, alpha, beta, depth + 1))
+      if v >= beta:
+        return v
+      alpha = max(alpha, v)
+    return v
+
+  def min_value(state, alpha, beta, depth):
+    if depth > 4:
+      return staticEval(state)
+    v = -infinity
+    for s in successors(state):
+      v = min(v, max_value(s, alpha, beta, depth + 1))
+      if v <= alpha:
+        return v
+      beta = min(beta, v)
+    return v
+  
+  # new = DEEP_COPY(currentState.board)
+  # OPEN = [new]
+  # CLOSED = {}
+
+  # while OPEN != []:
+  #   S = OPEN[0]
+  #   del OPEN[0]
+
+  #   L = []
+  #   for i in range(8):
+  #     for j in range(8):
+  #       if S[i][i] != 0:
+  #         if can_move(S, i, j):
+  #           for k in range(8):
+  #             new_state = move(S, i, j, k)
+  #             if not occurs_in(HASHCODE(new_state), CLOSED.keys()):
+  #               L.append(new_state)
+
+  #   for i in L:
+  #     CLOSED[HASHCODE(i)] = S
+  #     for j in range(len(OPEN)):
+  #       if DEEP_EQUALS(i, OPEN[j]):
+  #         del OPEN[j]; break
+
+  #   OPEN = L + OPEN
 
   return [["", currentState], "RAWR! YOUR MOVE PUNY HUMAN!"]
 
@@ -337,6 +398,7 @@ def get_transposition_table_value(zobrist_hash):
     return PREVIOUS_STATES[zobrist_hash]
   return None
 
+<<<<<<< HEAD
 # Represents piece values to be used in the
 # static evaluation function. A pawn is worth 100
 # and a king is worth 100x that - 10000 - as the king
