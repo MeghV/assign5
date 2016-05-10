@@ -1,3 +1,5 @@
+# tanimotosaurusrex_BC_Player
+
 from random import *
 
 # Immobilized Pieces
@@ -335,9 +337,30 @@ def get_transposition_table_value(zobrist_hash):
     return PREVIOUS_STATES[zobrist_hash]
   return None
 
+PIECE_VALUES = {
+  "2": -100,   # Black / Pawn
+  "3":  100,   # White / Pawn
+  "4": -250,   # Black / Coordinator
+  "5":  250,   # White / Coordinator
+  "6": -300,   # Black / Leaper
+  "7":  300,   # White / Leaper
+  "8": -350,   # Black / Imitator
+  "9":  350,   # White / Imitator
+  "10": -500,  # Black / Withdrawer
+  "11":  500,  # White / Withdrawer
+  "12": -10000,  # Black / King
+  "13":  10000,  # White / King
+  "14": -750,  # Black / Immobilizer
+  "15": 750  # White / Immobilizer
+}
+
 def staticEval(state):
-  # TODO
-  return randint(0, 100)
+  score = 0
+  for row in state:
+    for piece in row:
+      if piece != 0:
+        score += PIECE_VALUES[str(piece)]
+  return score
 
 
 def pretty_print_state(state):
