@@ -26,10 +26,10 @@ def parse(bs): # bs is board string
       b[iy][jx] = INIT_TO_CODE[rss[jx]]
   return b
 
-INITIAL_UPDATE = parse('''
+INITIAL = parse('''
 c l i w k i l f
-p p p p p p p -
-- - - - - - - p
+p p p p p p p p
+- - - - - - - -
 - - - - - - - -
 - - - - - - - -
 - - - - - - - -
@@ -92,65 +92,70 @@ def DEEP_EQUALS(list1, list2):
 def move(s, row, column, move_to):
   print("move")
   hold = s[row][column]
-  s[row][column] = 0
   # Pawns
   if hold in [2, 3]:
     print ("Is Pawn")
     if clear_path_vertical(s, row, column, move_to, column):
-      s[row][column] = 0
-      s[move_to][column] = hold
+      if s[move_to][column] == 0:
+        s[move_to][column] = hold
+        s[row][column] = 0
     elif clear_path_horizontal(s, row, column, row, move_to):
-      s[row][column] = 0
-      s[row][move_to] = hold
+      if s[row][move_to] == 0:
+        s[row][move_to] = hold
+        s[row][column] = 0
   # Kings
   elif hold in [13, 14]:
     print ("Is King")
     if s[row + 1][column] == 0:
       s[row + 1][column] = hold
+      s[row][column] = 0
     elif s[row + 1][column + 1] == 0:
       s[row + 1][column + 1] = hold
+      s[row][column] = 0
     elif s[row + 1][column - 1] == 0:
       s[row + 1][column - 1] = hold
+      s[row][column] = 0
     elif s[row][column + 1] == 0:
       s[row][column + 1] = hold
+      s[row][column] = 0
     elif s[row][column - 1] == 0:
       s[row][column - 1] = hold
+      s[row][column] = 0
     elif s[row - 1][column] == 0:
       s[row - 1][column] = hold
+      s[row][column] = 0
     elif s[row - 1][column + 1] == 0:
       s[row - 1][column + 1] = hold
+      s[row][column] = 0
     elif s[row - 1][column - 1] == 0:
       s[row - 1][column - 1] = hold
+      s[row][column] = 0
   # All other pieces
   else:
-    print ("else")
+    print ("Is Else")
     if clear_path_vertical(s, row, column, move_to, column):
       s[move_to][column] = hold
-      print ("a")
+      s[row][column] = 0
     elif clear_path_horizontal(s, row, column, row, move_to):
       s[row][move_to] = hold
-      print ("b")
-    print ("f")
+      s[row][column] = 0
     if row - move_to >= 0 and column - move_to >= 0:
-      print ("c")
       if clear_path_diagonal(s, row, column, row - move_to, column - move_to):
         s[row - move_to][column - move_to] = hold
-      print ("1")
+        s[row][column] = 0
     elif row + move_to < 8 and column - move_to >= 0:
-      print ("l")
       if clear_path_diagonal(s, row, column, row + move_to, column - move_to):
-        s[row + move_to, column - move_to] = hold
-      print ("2")
+        s[row + move_to][column - move_to] = hold
+        s[row][column] = 0
     elif row - move_to >= 0 and column + move_to < 8:
       if clear_path_diagonal(s, row, column, row - move_to, column + move_to):
-        s[r - move_to, column + move_to] = hold
-      print ("3")
+        s[row - move_to][column + move_to] = hold
+        s[row][column] = 0
     elif row + move_to < 8 and column + move_to < 8:
       if clear_path_diagonal(s, row, column, row + move_to, column + move_to):
-        s[r + move_to, column + move_to]
-      print ("4")
-    print ("end")
-  print ("returning")
+        s[row + move_to][column + move_to] = hold
+        s[row][column] = 0
+  print (s)
   return s
 
 # Checks that the horizontal path is clear.
@@ -179,9 +184,12 @@ def clear_path_vertical(s, from_row, from_column, to_row, to_column):
 
 # Checks that the diagonal path is clear.
 def clear_path_diagonal(s, from_row, from_column, to_row, to_column):
+  print ("diag")
   check_row = from_row
   check_column = from_column
-  while from_row != to_row and from_column != to_column:
+  print (to_row)
+  print (to_column)
+  while check_row != to_row and check_column != to_column:
     if from_row > to_row:
       check_row -= 1
     else:
@@ -190,7 +198,7 @@ def clear_path_diagonal(s, from_row, from_column, to_row, to_column):
       check_column -= 1
     else:
       check_column += 1
-    if s[check_row, check_column] != 0:
+    if s[check_row][check_column] != 0:
       return False
   return True
 
@@ -257,7 +265,6 @@ def makeMove(currentState, currentRemark, timeLimit = 10000):
       for j in range(len(OPEN)):
         if DEEP_EQUALS(i, OPEN[j]):
           del OPEN[j]; break
-
     OPEN = OPEN + L
 
 
