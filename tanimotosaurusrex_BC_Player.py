@@ -337,6 +337,16 @@ def get_transposition_table_value(zobrist_hash):
     return PREVIOUS_STATES[zobrist_hash]
   return None
 
+# Represents piece values to be used in the
+# static evaluation function. A pawn is worth 100
+# and a king is worth 100x that - 10000 - as the king
+# (and the death of a king) is worth the most. Between 
+# those values, the Immobilizer is worth the most at 750.
+# The Immobilizer is one of the most powerful pieces in
+# the game and as such, is valued 2nd highest. Other pieces
+# are valued less based on their attack capabilities. Movement
+# abilites are only taken into account for the Pawn (and King)
+# as every other piece can move in any direction.
 PIECE_VALUES = {
   "2": -100,   # Black / Pawn
   "3":  100,   # White / Pawn
@@ -354,14 +364,160 @@ PIECE_VALUES = {
   "15": 750  # White / Immobilizer
 }
 
+WHITE_PIECES = [3,15,7,9,11,13,9,7,5]
+BLACK_PIECES = [4,6,8,10,12,8,6,14,2]
+def is_white_piece(piece_number):
+  return piece_number in WHITE_PIECES
+
+def is_black_piece(piece_number):
+  return piece_number in BLACK_PIECES
+
 def staticEval(state):
-  score = 0
-  for row in state:
-    for piece in row:
+  score = float(0)
+  for row_idx, row in enumerate(state):
+    for piece_idx, piece in enumerate(row):
       if piece != 0:
-        score += PIECE_VALUES[str(piece)]
+        # Killing pieces counts for the most
+        # points
+        piece_value = PIECE_VALUES[str(piece)]
+        score += piece_value
+
+        upper_piece = -1
+        bottom_piece = -1
+        right_piece = -1
+        left_piece = -1
+        upper_left_corner_piece = -1
+        upper_right_corner_piece = -1
+        bottom_left_corner_piece = -1
+        bottom_right_corner_piece = -1
+        upper_space = row_idx > 0
+        bottom_space = row_idx < 7
+        left_space = piece_idx > 0
+        right_space = piece_idx < 7
+
+        if upper_space:
+          upper_piece = state[row_idx - 1][piece_idx]
+        if left_space:
+          left_piece = state[row_idx][piece_idx - 1]
+        if right_space:
+          right_piece = state[row_idx][piece_idx + 1]
+        if bottom_space:
+          bottom_piece = state[row_idx + 1][piece_idx]
+        if upper_space and left_space:
+          upper_left_corner_piece = state[row_idx - 1][piece_idx - 1]
+        if upper_space and right_space:
+          upper_right_corner_piece = state[row_idx - 1][piece_idx + 1]
+        if bottom_space and left_space:
+          bottom_left_corner_piece = state[row_idx + 1][piece_idx - 1]
+        if bottom_space and right_space:
+          bottom_right_corner_piece = state[row_idx + 1][piece_idx + 1]
+        
+        # Boost for immobilizations 
+        if piece in [14,15]:
+          score += immobilizer_boost(piece, upper_piece, bottom_piece, right_piece, left_piece, \
+                                     upper_right_corner_piece, upper_left_corner_piece, bottom_right_corner_piece, bottom_left_corner_piece)
+        # Boost for withdrawers
+        elif piece in [10,11]:
+          score += withdrawer_boost(piece, upper_piece, bottom_piece, right_piece, left_piece, \
+                                     upper_right_corner_piece, upper_left_corner_piece, bottom_right_corner_piece, bottom_left_corner_piece)
+
   return score
 
+def is_opposite_color(piece_a, piece_b):
+  return (PIECE_VALUES[str(piece_a)] *  PIECE_VALUES[str(piece_b)]) < 0
+
+
+def withdrawer_boost(withdrawer_piece, upper_piece=-1, lower_piece=-1, right_piece=-1, left_piece=-1,\
+                      upper_right_corner_piece=-1, upper_left_corner_piece=-1, bottom_right_corner_piece=-1, bottom_left_corner_piece=-1):
+  '''
+  Gives a boost to the player if their withdrawer is next to an enemy piece.
+  '''
+  score_boost = float(0)
+  withdrawer_boost = lambda withdrawer_target, withdrawer: PIECE_VALUES[str(withdrawer_target)] * 0.04
+
+  if upper_piece not in [-1,0] and is_opposite_color(upper_piece, withdrawer_piece):
+    print("Withdrawer above piece: " + str(upper_piece) + ", " + str(PIECE_VALUES[str(upper_piece)]))
+    score_boost += withdrawer_boost(upper_piece, withdrawer_piece)
+
+  if lower_piece not in [-1,0] and is_opposite_color(lower_piece, withdrawer_piece):
+    print("Withdrawer Below: " + str(lower_piece) + ", " + str(PIECE_VALUES[str(lower_piece)]))
+    score_boost += withdrawer_boost(lower_piece, withdrawer_piece)
+
+  if right_piece not in [-1,0] and is_opposite_color(right_piece, withdrawer_piece):
+    print("Withdrawer Right: " + str(right_piece) + ", " + str(PIECE_VALUES[str(right_piece)]))
+    score_boost += withdrawer_boost(right_piece, withdrawer_piece)
+
+  if left_piece not in [-1,0] and is_opposite_color(left_piece, withdrawer_piece):
+    print("Withdrawer Left: " + str(left_piece) + ", " + str(PIECE_VALUES[str(left_piece)]))
+    score_boost += withdrawer_boost(left_piece, withdrawer_piece)
+
+  if upper_right_corner_piece not in [-1,0] and is_opposite_color(upper_right_corner_piece, withdrawer_piece):
+    print("Withdrawer Upper Right: " + str(upper_right_corner_piece) + ", " + str(PIECE_VALUES[str(upper_right_corner_piece)]))
+    score_boost += withdrawer_boost(upper_right_corner_piece, withdrawer_piece)
+
+  if upper_left_corner_piece not in [-1,0] and is_opposite_color(upper_left_corner_piece, withdrawer_piece):
+    print("Withdrawer Upper Left: " + str(upper_left_corner_piece) + ", " + str(PIECE_VALUES[str(upper_left_corner_piece)]))
+    score_boost += withdrawer_boost(upper_left_corner_piece, withdrawer_piece)
+
+  if bottom_left_corner_piece not in [-1,0] and is_opposite_color(bottom_left_corner_piece, withdrawer_piece):
+    print("Withdrawer Bottom Left: "+ str(bottom_left_corner_piece) + ", " + str(PIECE_VALUES[str(bottom_left_corner_piece)]))
+    score_boost += withdrawer_boost(bottom_left_corner_piece, withdrawer_piece)
+
+  if bottom_right_corner_piece not in [-1,0] and is_opposite_color(bottom_right_corner_piece, withdrawer_piece):
+    print("Withdrawer Bottom Right: " + str(bottom_right_corner_piece) + ", " + str(PIECE_VALUES[str(bottom_right_corner_piece)]))
+    score_boost += withdrawer_boost(bottom_right_corner_piece, withdrawer_piece)
+
+  # Swap sign if player is WHITE piece to give positive boost
+  if is_white_piece(withdrawer_piece): score_boost *= -1
+  return score_boost
+
+
+def immobilizer_boost(immobilizer_piece, upper_piece=-1, lower_piece=-1, right_piece=-1, left_piece=-1,\
+                      upper_right_corner_piece=-1, upper_left_corner_piece=-1, bottom_right_corner_piece=-1, bottom_left_corner_piece=-1):
+  global PIECE_VALUES
+  '''
+  Gives a boost to a player if their immobilizer has immobilized pieces.
+  The boost is relative to the value of the immobilizied piece(s).
+  '''
+  score_boost = float(0)
+  # Boost function: value of immobilized piece / value of immobilizier (this will always be negative)
+  immobilizer_boost = lambda immobilized_piece, immobilizer: PIECE_VALUES[str(immobilized_piece)] * 0.06
+
+  if upper_piece not in [-1,0] and is_opposite_color(upper_piece, immobilizer_piece):
+    print("Immobilizer Above: " + str(upper_piece) + ", " + str(PIECE_VALUES[str(upper_piece)]))
+    score_boost += immobilizer_boost(upper_piece, immobilizer_piece)
+
+  if lower_piece not in [-1,0] and is_opposite_color(lower_piece, immobilizer_piece):
+    print("Immobilizer Below: " + str(lower_piece) + ", " + str(PIECE_VALUES[str(lower_piece)]))
+    score_boost += immobilizer_boost(lower_piece, immobilizer_piece)
+
+  if right_piece not in [-1,0] and is_opposite_color(right_piece, immobilizer_piece):
+    print("Immobilizer Right: " + str(right_piece) + ", " + str(PIECE_VALUES[str(right_piece)]))
+    score_boost += immobilizer_boost(right_piece, immobilizer_piece)
+
+  if left_piece not in [-1,0] and is_opposite_color(left_piece, immobilizer_piece):
+    print("Immobilizer Left: " + str(left_piece) + ", " + str(PIECE_VALUES[str(left_piece)]))
+    score_boost += immobilizer_boost(left_piece, immobilizer_piece)
+
+  if upper_right_corner_piece not in [-1,0] and is_opposite_color(upper_right_corner_piece, immobilizer_piece):
+    print("Immobilizer Upper Right: " + str(upper_right_corner_piece) + ", " + str(PIECE_VALUES[str(upper_right_corner_piece)]))
+    score_boost += immobilizer_boost(upper_right_corner_piece, immobilizer_piece)
+
+  if upper_left_corner_piece not in [-1,0] and is_opposite_color(upper_left_corner_piece, immobilizer_piece):
+    print("Immobilizer Upper Left: " + str(upper_left_corner_piece) + ", " + str(PIECE_VALUES[str(upper_left_corner_piece)]))
+    score_boost += immobilizer_boost(upper_left_corner_piece, immobilizer_piece)
+
+  if bottom_left_corner_piece not in [-1,0] and is_opposite_color(bottom_left_corner_piece, immobilizer_piece):
+    print("Immobilizer Bottom Left: "+ str(bottom_left_corner_piece) + ", " + str(PIECE_VALUES[str(bottom_left_corner_piece)]))
+    score_boost += immobilizer_boost(bottom_left_corner_piece, immobilizer_piece)
+
+  if bottom_right_corner_piece not in [-1,0] and is_opposite_color(bottom_right_corner_piece, immobilizer_piece):
+    print("Immobilizer Bottom Right: " + str(bottom_right_corner_piece) + ", " + str(PIECE_VALUES[str(bottom_right_corner_piece)]))
+    score_boost += immobilizer_boost(bottom_right_corner_piece, immobilizer_piece)
+
+  # Swap sign if player is WHITE piece to give positive boost
+  if is_white_piece(immobilizer_piece): score_boost *= -1
+  return score_boost
 
 def pretty_print_state(state):
   '''
@@ -371,6 +527,12 @@ def pretty_print_state(state):
   for row in state:
     print(row)
 
+def immobilizerDebuggerSetup():
+  global INITIAL
+  INITIAL[7][0]=0
+  INITIAL[4][0]=15
+  INITIAL[1][0]=0
+  INITIAL[3][0]=2
 
 # staticEval(state). This function will perform a static evaluation of the given state. 
 # The value returned should be high if the state is good for WHITE and low if the state is 
