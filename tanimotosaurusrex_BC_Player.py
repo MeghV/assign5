@@ -277,18 +277,12 @@ ZOBRIST_NUM_TABLE = [ [ randint(0, 9223372036854775807) ] * POSITIONS ] * PIECES
 
 # Stores previous states keyed by their Zobrist hash values.
 # The value of each state is represented as follows:
-# { evaluation_value: 0, ply: 0}
+# { evaluation_value: 0, ply: 0, cutoff_value: cutoff_value}
 # "evaluation_value" is the previously calculated static evaluation 
-# function value and "ply" is the ply at which the value was
-# calculated. 
+# function value, "ply" is the ply at which the value was
+# calculated, and "cutoff_value" is the value that resulted in
+# a cutoff of the state branch.
 PREVIOUS_STATES = {}
-
-
-# def init_zobrist_table():
-#   global ZOBRIST_NUM_TABLE
-#   for i in range(PIECES):
-#     for j in range(POSITIONS):
-#       ZOBRIST_NUM_TABLE[i][j] = randint(0, 9223372036854775807)
 
 def calculate_zobrist_hash(state):
   '''
@@ -310,7 +304,7 @@ def calculate_zobrist_hash(state):
         hash ^= ZOBRIST_NUM_TABLE[piece_hash_index][piece_col]
   return hash
         
-def store_state_value(zobrist_hash, evaluation_value, ply=0):
+def store_transposition_table_value(zobrist_hash, evaluation_value, cutoff_value, ply):
   '''
   Caches the static evaluation function value for a unique state
   to avoid recomputing evaluation values for transpositions in 
@@ -322,26 +316,21 @@ def store_state_value(zobrist_hash, evaluation_value, ply=0):
   if zobrist_hash not in PREVIOUS_STATES:
     PREVIOUS_STATES[zobrist_hash] =\
       {"evaluation_value": evaluation_value,\
-       "ply": ply}
+       "ply": ply, "cutoff_value": cutoff_value}
 
-def get_state_value(zobrist_hash):
+def get_transposition_table_value(zobrist_hash):
   ''' 
-  Returns the static evaluation value of a previously encountered
-  state. If the state doesn't exist, a value of -1 is returned.
+  Returns the static evaluation value, ply, and cutoff of a 
+  previously encountered state. If the state doesn't exist,
+  None is returned.
   '''
   if zobrist_hash in PREVIOUS_STATES:
     return PREVIOUS_STATES[zobrist_hash]
-  return -1
+  return None
 
-def staticEvalBasic(state):
-  state_zobrist_hash = calculate_zobrist_hash(state)
-  state_eval_value = get_state_value(state_zobrist_hash)
-  if state_eval_value == -1:
-    # if the static eval value hasn't been calculated before
-    state_eval_value = 0
-    store_state_value(state_zobrist_hash, state_eval_value)
-  # else return the previously calculated static eval value
-  return state_eval_value
+def staticEval(state):
+  # TODO
+  return randint(0, 100)
 
 
 def pretty_print_state(state):
