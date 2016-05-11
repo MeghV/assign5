@@ -140,11 +140,12 @@ def clear_path_diagonal(s, from_row, from_column, to_row, to_column):
 
 # Checks that there are empty spaces around the piece.
 def can_move(s, from_row, from_column, to_row, to_column):
-  if s[to_row][to_column] == 0 and (from_row != to_row and from_column != to_column):
+  if s[to_row][to_column] == 0:
     if s[from_row][from_column] in [12, 13]:
       if (abs(from_row - to_row) <= 1) and (abs(from_column - to_column) <= 1):
         return True
       return False
+    # print ("can_move", from_row, from_column, to_row, to_column)
     if (from_row == to_row):
       if clear_path_horizontal(s, from_row, from_column, to_row, to_column):
         return True
@@ -190,7 +191,6 @@ for i in range(8):
     for k in range(8):
       for l in range(8):
         move_combinations.append((i, j, k, l))
-print (move_combinations)
 
 OPERATORS = [Operator("Move piece at " + str(p) + ", " + str(q) + " to " + str(m) + ", " + str(n),
                       lambda s, p = p, q = q, m = m, n = n: can_move(s, p, q, m, n),
@@ -199,6 +199,7 @@ OPERATORS = [Operator("Move piece at " + str(p) + ", " + str(q) + " to " + str(m
 
 # Iterative Deepening to find the optimal board move.
 def makeMove(currentState, currentRemark, timeLimit = 10000):
+  import math
   LAST_MOVE = BC_state(currentState.board, currentState.whose_move)
   last_board = DEEP_COPY(currentState.board)
 
@@ -216,9 +217,9 @@ def makeMove(currentState, currentRemark, timeLimit = 10000):
   first_moves = successors(last_board)
 
   def max_value(state, alpha, beta, depth):
-    if depth > 4:
+    if depth > 2:
       return staticEval(state)
-    v = -infinity
+    v = -math.inf
     for s in successors(state):
       v = max(v, min_value(s, alpha, beta, depth + 1))
       if v >= beta:
@@ -227,41 +228,21 @@ def makeMove(currentState, currentRemark, timeLimit = 10000):
     return v
 
   def min_value(state, alpha, beta, depth):
-    if depth > 4:
+    if depth > 2:
       return staticEval(state)
-    v = -infinity
+    v = -math.inf
     for s in successors(state):
       v = min(v, max_value(s, alpha, beta, depth + 1))
       if v <= alpha:
         return v
       beta = min(beta, v)
     return v
+
   
-  # new = DEEP_COPY(currentState.board)
-  # OPEN = [new]
-  # CLOSED = {}
-
-  # while OPEN != []:
-  #   S = OPEN[0]
-  #   del OPEN[0]
-
-  #   L = []
-  #   for i in range(8):
-  #     for j in range(8):
-  #       if S[i][i] != 0:
-  #         if can_move(S, i, j):
-  #           for k in range(8):
-  #             new_state = move(S, i, j, k)
-  #             if not occurs_in(HASHCODE(new_state), CLOSED.keys()):
-  #               L.append(new_state)
-
-  #   for i in L:
-  #     CLOSED[HASHCODE(i)] = S
-  #     for j in range(len(OPEN)):
-  #       if DEEP_EQUALS(i, OPEN[j]):
-  #         del OPEN[j]; break
-
-  #   OPEN = L + OPEN
+  best = []
+  for i in first_moves:
+    best.append(min_value(i, -math.inf, math.inf, 0))
+  print (best)
 
   return [["", currentState], "RAWR! YOUR MOVE PUNY HUMAN!"]
 
