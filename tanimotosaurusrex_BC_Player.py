@@ -2,10 +2,10 @@ from random import *
 
 # Immobilized Pieces
 # Black White move checker
-# Finding best move
 
 BLACK = 0
 WHITE = 1
+PLAYER = 0
 
 INIT_TO_CODE = {'p':2, 'P':3, 'c':4, 'C':5, 'l':6, 'L':7, 'i':8, 'I':9,
   'w':10, 'W':11, 'k':12, 'K':13, 'f':14, 'F':15, '-':0}
@@ -92,36 +92,72 @@ def DEEP_EQUALS(list1, list2):
     return False
 
 def move(s, from_row, from_column, to_row, to_column):
-  hold = s[from_row][from_column]
-  s[from_row][from_column] = 0
-  s[to_row][to_column] = hold
+  new = DEEP_COPY(s)
+  hold = new[from_row][from_column]
+  new[from_row][from_column] = 0
+  new[to_row][to_column] = hold
+  remove_piece(new, from_row, from_column, to_row, to_column, hold):
+  return new
 
-  return s
+def is_opponent(piece_id):
+  global PLAYER
+  if PLAYER == 1:
+    if piece_id % 2 == 0:
+      return True
+  else:
+    if piece_id % 2 != 0:
+      return True
+  return False
 
-def remove_piece():
-  return
+def remove_piece(new, from_row, from_column, to_row, to_column, hold):
+    if hold in [2, 3]:
+      if is_opponent(new[to_row + 1][to_column]):
+        if not is_opponent(new[to_row + 2][to_column]):
+          new[to_row + 1][to_column] = 0
+      if is_opponent(new[to_row - 1][to_column]):
+        if not is_opponent(new[to_row - 2][to_column]):
+          new[to_row - 1][to_column] = 0
+      if is_opponent(new[to_row][to_column + 1]):
+        if not is_opponent(new[to_row][to_column + 2]):
+          new[to_row][to_column + 1] = 0
+      if is_opponent(new[to_row][to_column - 1]):
+        if not is_opponent(new[to_row][to_column - 2]):
+          new[to_row][to_column - 1] = 0
+    elif hold in [4, 5]:
+
+    elif hold in [6, 7]:
+
+    elif hold in [8, 9]:
+
+    elif hold in [10, 11]:
+
+    elif hold in [12, 13]:
+
+    elif hold in [14, 15]:
+
+  return new
 
 # Checks that the horizontal path is clear.
-def clear_path_horizontal(s, from_row, from_column, to_row, to_column):
+def clear_path_vertical(s, from_row, from_column, to_row, to_column):
   check_row = from_row
-  while from_row != to_row:
+  while check_row != to_row:
     if from_row > to_row:
       check_row -= 1
     else:
       check_row += 1
-    if s[check_row, from_column] != 0:
+    if s[check_row][from_column] != 0:
       return False
   return True
 
 # Chceks that the vertical path is clear.
-def clear_path_vertical(s, from_row, from_column, to_row, to_column):
+def clear_path_horizontal(s, from_row, from_column, to_row, to_column):
   check_column = from_column
-  while from_column != to_column:
+  while check_column != to_column:
     if from_column > to_column:
       check_column -= 1
     else:
       check_column += 1
-    if s[from_row, check_column] != 0:
+    if s[from_row][check_column] != 0:
       return False
   return True
 
@@ -144,7 +180,14 @@ def clear_path_diagonal(s, from_row, from_column, to_row, to_column):
 
 # Checks that there are empty spaces around the piece.
 def can_move(s, from_row, from_column, to_row, to_column):
-  if s[to_row][to_column] == 0:
+  global PLAYER
+  if PLAYER == 1:
+    if s[from_row][from_column] % 2 == 0:
+      return False
+  else:
+    if s[from_row][from_column] % 2 != 0:
+      return False
+  if s[to_row][to_column] == 0 and not ((from_row != to_row) and (from_column != to_column)):
     if s[from_row][from_column] in [12, 13]:
       if (abs(from_row - to_row) <= 1) and (abs(from_column - to_column) <= 1):
         return True
@@ -161,6 +204,8 @@ def can_move(s, from_row, from_column, to_row, to_column):
         if clear_path_diagonal(s, from_row, from_column, to_row, to_column):
           return True
   return False
+
+# print can_move(INITIAL, 2, 0, 3, 0)
 
 # Checks to see if the board has already occured.
 def occurs_in(new_state, test_list):
@@ -201,14 +246,18 @@ OPERATORS = [Operator("Move piece at " + str(p) + ", " + str(q) + " to " + str(m
                       lambda s, p = p, q = q, m = m, n = n: move(s, p, q, m, n))
                       for (p, q, m, n) in move_combinations]
 
-# Iterative Deepening to find the optimal board move.
+# Alpha Beta to find the optimal board move.
 def makeMove(currentState, currentRemark, timeLimit = 10000):
   import math
+  import time
   LAST_MOVE = BC_state(currentState.board, currentState.whose_move)
   last_board = DEEP_COPY(currentState.board)
   infinity = math.inf
-  player = currentState.whose_move
+  global PLAYER
+  PLAYER = currentState.whose_move
   cutoff = 1
+  limit = 0.40
+  t0 = time.clock()
 
   def successors(state):
     S = state
@@ -216,22 +265,17 @@ def makeMove(currentState, currentRemark, timeLimit = 10000):
     for op in OPERATORS:
       if op.precond(S):
         new_state = op.state_transf(S)
-        L.append(new_state)
+        if not DEEP_EQUALS(new_state, S):
+          L.append(new_state)
     return L
   first_moves = successors(last_board)
 
   def max_value(state, alpha, beta, depth):
+    elapsed = (time.clock() - t0)
+    if elapsed > limit:
+      return staticEval(state)
     if depth > cutoff:
-      global ZOBRIST_NUM_TABLE
-      global PREVIOUS_STATES
-      state_hash = calculate_zobrist_hash(state)
-      if state_hash in PREVIOUS_STATES.keys():
-        return get_transposition_table_value(state_hash)
-      else:
-        # eval_value = staticEval(state)
-        # store_transposition_table_value(state_hash, eval_value, cutoff, depth)
-        # return eval_value
-        return staticEval(state)
+      return staticEval(state)
     v = -infinity
     for s in successors(state):
       v = max(v, min_value(s, alpha, beta, depth + 1))
@@ -241,17 +285,11 @@ def makeMove(currentState, currentRemark, timeLimit = 10000):
     return v
 
   def min_value(state, alpha, beta, depth):
+    elapsed = (time.clock() - t0)
+    if elapsed > limit:
+      return staticEval(state)
     if depth > cutoff:
-      global ZOBRIST_NUM_TABLE
-      global PREVIOUS_STATES
-      state_hash = calculate_zobrist_hash(state)
-      if state_hash in PREVIOUS_STATES.keys():
-        return get_transposition_table_value(state_hash)
-      else:
-        # eval_value = staticEval(state)
-        # store_transposition_table_value(state_hash, eval_value, cutoff, depth)
-        # return eval_value
-        return staticEval(state)
+      return staticEval(state)
     v = infinity
     for s in successors(state):
       v = min(v, max_value(s, alpha, beta, depth + 1))
@@ -260,13 +298,30 @@ def makeMove(currentState, currentRemark, timeLimit = 10000):
       beta = min(beta, v)
     return v
 
-  
   best = []
   for i in first_moves:
     best.append(min_value(i, -infinity, infinity, 0))
-    print (best)
+    elapsed = (time.clock() - t0)
+    if elapsed > limit:
+      break
+  import operator
+  index, value = max(enumerate(best), key=operator.itemgetter(1))
 
-  return [["", currentState], "RAWR! YOUR MOVE PUNY HUMAN!"]
+  if currentState.whose_move == 1:
+    player_move = 0
+  else:
+    player_move = 1
+
+  elapsed = (time.clock() - t0)
+  if elapsed > limit:
+    import random
+    next_move = random.choice(first_moves)
+    NEW_MOVE = BC_state(next_move, player_move)
+    print (pretty_print_state(next_move))
+  else:
+    NEW_MOVE = BC_state(first_moves[index], player_move)
+
+  return [["", NEW_MOVE], "RAWR! YOUR MOVE PUNY HUMAN!"]
 
 # 14 x 64 table to represent the different pieces
 # (7 on each side) as well as the different positions
@@ -333,7 +388,6 @@ def get_transposition_table_value(zobrist_hash):
     return PREVIOUS_STATES[zobrist_hash]
   return None
 
-<<<<<<< HEAD
 # Represents piece values to be used in the
 # static evaluation function. A pawn is worth 100
 # and a king is worth 100x that - 10000 - as the king
@@ -433,35 +487,35 @@ def withdrawer_boost(withdrawer_piece, upper_piece=-1, lower_piece=-1, right_pie
   withdrawer_boost = lambda withdrawer_target, withdrawer: PIECE_VALUES[str(withdrawer_target)] * 0.04
 
   if upper_piece not in [-1,0] and is_opposite_color(upper_piece, withdrawer_piece):
-    print("Withdrawer above piece: " + str(upper_piece) + ", " + str(PIECE_VALUES[str(upper_piece)]))
+    # print("Withdrawer above piece: " + str(upper_piece) + ", " + str(PIECE_VALUES[str(upper_piece)]))
     score_boost += withdrawer_boost(upper_piece, withdrawer_piece)
 
   if lower_piece not in [-1,0] and is_opposite_color(lower_piece, withdrawer_piece):
-    print("Withdrawer Below: " + str(lower_piece) + ", " + str(PIECE_VALUES[str(lower_piece)]))
+    # print("Withdrawer Below: " + str(lower_piece) + ", " + str(PIECE_VALUES[str(lower_piece)]))
     score_boost += withdrawer_boost(lower_piece, withdrawer_piece)
 
   if right_piece not in [-1,0] and is_opposite_color(right_piece, withdrawer_piece):
-    print("Withdrawer Right: " + str(right_piece) + ", " + str(PIECE_VALUES[str(right_piece)]))
+    # print("Withdrawer Right: " + str(right_piece) + ", " + str(PIECE_VALUES[str(right_piece)]))
     score_boost += withdrawer_boost(right_piece, withdrawer_piece)
 
   if left_piece not in [-1,0] and is_opposite_color(left_piece, withdrawer_piece):
-    print("Withdrawer Left: " + str(left_piece) + ", " + str(PIECE_VALUES[str(left_piece)]))
+    # print("Withdrawer Left: " + str(left_piece) + ", " + str(PIECE_VALUES[str(left_piece)]))
     score_boost += withdrawer_boost(left_piece, withdrawer_piece)
 
   if upper_right_corner_piece not in [-1,0] and is_opposite_color(upper_right_corner_piece, withdrawer_piece):
-    print("Withdrawer Upper Right: " + str(upper_right_corner_piece) + ", " + str(PIECE_VALUES[str(upper_right_corner_piece)]))
+    # print("Withdrawer Upper Right: " + str(upper_right_corner_piece) + ", " + str(PIECE_VALUES[str(upper_right_corner_piece)]))
     score_boost += withdrawer_boost(upper_right_corner_piece, withdrawer_piece)
 
   if upper_left_corner_piece not in [-1,0] and is_opposite_color(upper_left_corner_piece, withdrawer_piece):
-    print("Withdrawer Upper Left: " + str(upper_left_corner_piece) + ", " + str(PIECE_VALUES[str(upper_left_corner_piece)]))
+    # print("Withdrawer Upper Left: " + str(upper_left_corner_piece) + ", " + str(PIECE_VALUES[str(upper_left_corner_piece)]))
     score_boost += withdrawer_boost(upper_left_corner_piece, withdrawer_piece)
 
   if bottom_left_corner_piece not in [-1,0] and is_opposite_color(bottom_left_corner_piece, withdrawer_piece):
-    print("Withdrawer Bottom Left: "+ str(bottom_left_corner_piece) + ", " + str(PIECE_VALUES[str(bottom_left_corner_piece)]))
+    # print("Withdrawer Bottom Left: "+ str(bottom_left_corner_piece) + ", " + str(PIECE_VALUES[str(bottom_left_corner_piece)]))
     score_boost += withdrawer_boost(bottom_left_corner_piece, withdrawer_piece)
 
   if bottom_right_corner_piece not in [-1,0] and is_opposite_color(bottom_right_corner_piece, withdrawer_piece):
-    print("Withdrawer Bottom Right: " + str(bottom_right_corner_piece) + ", " + str(PIECE_VALUES[str(bottom_right_corner_piece)]))
+    # print("Withdrawer Bottom Right: " + str(bottom_right_corner_piece) + ", " + str(PIECE_VALUES[str(bottom_right_corner_piece)]))
     score_boost += withdrawer_boost(bottom_right_corner_piece, withdrawer_piece)
 
   # Swap sign if player is WHITE piece to give positive boost
@@ -481,35 +535,35 @@ def immobilizer_boost(immobilizer_piece, upper_piece=-1, lower_piece=-1, right_p
   immobilizer_boost = lambda immobilized_piece, immobilizer: PIECE_VALUES[str(immobilized_piece)] * 0.06
 
   if upper_piece not in [-1,0] and is_opposite_color(upper_piece, immobilizer_piece):
-    print("Immobilizer Above: " + str(upper_piece) + ", " + str(PIECE_VALUES[str(upper_piece)]))
+    # print("Immobilizer Above: " + str(upper_piece) + ", " + str(PIECE_VALUES[str(upper_piece)]))
     score_boost += immobilizer_boost(upper_piece, immobilizer_piece)
 
   if lower_piece not in [-1,0] and is_opposite_color(lower_piece, immobilizer_piece):
-    print("Immobilizer Below: " + str(lower_piece) + ", " + str(PIECE_VALUES[str(lower_piece)]))
+    # print("Immobilizer Below: " + str(lower_piece) + ", " + str(PIECE_VALUES[str(lower_piece)]))
     score_boost += immobilizer_boost(lower_piece, immobilizer_piece)
 
   if right_piece not in [-1,0] and is_opposite_color(right_piece, immobilizer_piece):
-    print("Immobilizer Right: " + str(right_piece) + ", " + str(PIECE_VALUES[str(right_piece)]))
+    # print("Immobilizer Right: " + str(right_piece) + ", " + str(PIECE_VALUES[str(right_piece)]))
     score_boost += immobilizer_boost(right_piece, immobilizer_piece)
 
   if left_piece not in [-1,0] and is_opposite_color(left_piece, immobilizer_piece):
-    print("Immobilizer Left: " + str(left_piece) + ", " + str(PIECE_VALUES[str(left_piece)]))
+    # print("Immobilizer Left: " + str(left_piece) + ", " + str(PIECE_VALUES[str(left_piece)]))
     score_boost += immobilizer_boost(left_piece, immobilizer_piece)
 
   if upper_right_corner_piece not in [-1,0] and is_opposite_color(upper_right_corner_piece, immobilizer_piece):
-    print("Immobilizer Upper Right: " + str(upper_right_corner_piece) + ", " + str(PIECE_VALUES[str(upper_right_corner_piece)]))
+    # print("Immobilizer Upper Right: " + str(upper_right_corner_piece) + ", " + str(PIECE_VALUES[str(upper_right_corner_piece)]))
     score_boost += immobilizer_boost(upper_right_corner_piece, immobilizer_piece)
 
   if upper_left_corner_piece not in [-1,0] and is_opposite_color(upper_left_corner_piece, immobilizer_piece):
-    print("Immobilizer Upper Left: " + str(upper_left_corner_piece) + ", " + str(PIECE_VALUES[str(upper_left_corner_piece)]))
+    # print("Immobilizer Upper Left: " + str(upper_left_corner_piece) + ", " + str(PIECE_VALUES[str(upper_left_corner_piece)]))
     score_boost += immobilizer_boost(upper_left_corner_piece, immobilizer_piece)
 
   if bottom_left_corner_piece not in [-1,0] and is_opposite_color(bottom_left_corner_piece, immobilizer_piece):
-    print("Immobilizer Bottom Left: "+ str(bottom_left_corner_piece) + ", " + str(PIECE_VALUES[str(bottom_left_corner_piece)]))
+    # print("Immobilizer Bottom Left: "+ str(bottom_left_corner_piece) + ", " + str(PIECE_VALUES[str(bottom_left_corner_piece)]))
     score_boost += immobilizer_boost(bottom_left_corner_piece, immobilizer_piece)
 
   if bottom_right_corner_piece not in [-1,0] and is_opposite_color(bottom_right_corner_piece, immobilizer_piece):
-    print("Immobilizer Bottom Right: " + str(bottom_right_corner_piece) + ", " + str(PIECE_VALUES[str(bottom_right_corner_piece)]))
+    # print("Immobilizer Bottom Right: " + str(bottom_right_corner_piece) + ", " + str(PIECE_VALUES[str(bottom_right_corner_piece)]))
     score_boost += immobilizer_boost(bottom_right_corner_piece, immobilizer_piece)
 
   # Swap sign if player is WHITE piece to give positive boost
