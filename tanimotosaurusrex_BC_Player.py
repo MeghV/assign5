@@ -343,7 +343,6 @@ def pretty_print_state(state):
   for row in state:
     print(row)
 
-
 # staticEval(state). This function will perform a static evaluation of the given state. 
 # The value returned should be high if the state is good for WHITE and low if the state is 
 # good for BLACK. Although you may wish to extend the BC_state class to make staticEval a member of 
