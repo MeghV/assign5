@@ -1,0 +1,746 @@
+
+D-173-250-142-84:assign5 Ryan$ python3 BaroqueGameMaster.py tanimotosaurusrex_BC_Player SmartBC_BC_Player
+c l i w k i l f 
+p p p p p p p p 
+- - - - - - - - 
+- - - - - - - - 
+- - - - - - - - 
+- - - - - - - - 
+P P P P P P P P 
+F L I W K I L C 
+WHITE's move
+
+Baroque Chess Gamemaster v0.6-BETA
+The Gamemaster says, "Players, introduce yourselves."
+     (Playing WHITE:) I AM TANIMOTOSAURUS REX, THE WORLD'S BEST BAROQUE CHESS PLAYER!
+MY CREATORS ARE RYAN CHUI (rchui) AND MEGH VAKHARIA (meghv). LET'S RUMBLEEEEEE!
+     (Playing BLACK:) Hi my name is SmartBC. My creators are Kevin Fong (kfong94) and Jordan
+        Hand (jhand1). I is smart.
+The Gamemaster says, "Let's Play!"
+The initial state is...
+c l i w k i l f 
+p p p p p p p p 
+- - - - - - - - 
+- - - - - - - - 
+- - - - - - - - 
+- - - - - - - - 
+P P P P P P P P 
+F L I W K I L C 
+WHITE's move
+
+Time used in makeMove: 0.4222 seconds out of  0.5
+Within the time limit -- nice!
+Turn 1: Move is by WHITE to 
+Tanimotosaurus says: RAWR! YOUR MOVE PUNY HUMAN!
+c l i w k i l f 
+p p p p p p p p 
+- - - - - - - - 
+- - - - - - - - 
+- - - - - - - P 
+- - - - - - - - 
+P P P P P P P - 
+F L I W K I L C 
+BLACK's move
+
+Time used in makeMove: 0.4439 seconds out of  0.5
+Within the time limit -- nice!
+Turn 2: Move is by BLACK to 56630
+SmartBC says: Oh... I should just give up now...
+c l i w k i l f 
+p p p - p p p p 
+- - - - - - - - 
+- - - p - - - - 
+- - - - - - - P 
+- - - - - - - - 
+P P P P P P P - 
+F L I W K I L C 
+WHITE's move
+
+Time used in makeMove: 0.4057 seconds out of  0.5
+Within the time limit -- nice!
+Turn 3: Move is by WHITE to 
+Tanimotosaurus says: RAWR! YOUR MOVE PUNY HUMAN!
+c l i w k i l f 
+p p p - p p p p 
+- - - - - - - - 
+- - - p - - - - 
+- - - - - - P P 
+- - - - - - - - 
+P P P P P P - - 
+F L I W K I L C 
+BLACK's move
+
+Time used in makeMove: 0.4440 seconds out of  0.5
+Within the time limit -- nice!
+Turn 4: Move is by BLACK to -58428
+SmartBC says: Ha! Take that!
+c l i - k i l f 
+p p p w p p p p 
+- - - - - - - - 
+- - - p - - - - 
+- - - - - - P P 
+- - - - - - - - 
+P P P P P P - - 
+F L I W K I L C 
+WHITE's move
+
+Time used in makeMove: 0.4024 seconds out of  0.5
+Within the time limit -- nice!
+Turn 5: Move is by WHITE to 
+Tanimotosaurus says: RAWR! YOUR MOVE PUNY HUMAN!
+c l i - k i l f 
+p p p w p p p p 
+- - - - P - - - 
+- - - p - - - - 
+- - - - - - P P 
+- - - - - - - - 
+P P P P - P - - 
+F L I W K I L C 
+BLACK's move
+
+Time used in makeMove: 0.4440 seconds out of  0.5
+Within the time limit -- nice!
+Turn 6: Move is by BLACK to -48446
+SmartBC says: Ha! Take that!
+c l i - k i l f 
+p p p w p p p p 
+- - - - - - - - 
+- - - - p - - - 
+- - - - - - P P 
+- - - - - - - - 
+P P P P - P - - 
+F L I W K I L C 
+WHITE's move
+
+Time used in makeMove: 0.3972 seconds out of  0.5
+Within the time limit -- nice!
+Turn 7: Move is by WHITE to 
+Tanimotosaurus says: RAWR! YOUR MOVE PUNY HUMAN!
+c l i - k i l f 
+p p p w p p p p 
+- - - - - - - - 
+- - - - p - - - 
+P - - - - - - P 
+- - - - - - - - 
+P P P P - P - - 
+F L I W K I L C 
+BLACK's move
+
+Time used in makeMove: 0.4439 seconds out of  0.5
+Within the time limit -- nice!
+Turn 8: Move is by BLACK to -47646
+SmartBC says: Ha! Take that!
+c l - i k i l f 
+p p p w p p p p 
+- - - - - - - - 
+- - - - p - - - 
+P - - - - - - P 
+- - - - - - - - 
+P P P P - P - - 
+F L I W K I L C 
+WHITE's move
+
+Time used in makeMove: 0.4040 seconds out of  0.5
+Within the time limit -- nice!
+Turn 9: Move is by WHITE to 
+Tanimotosaurus says: RAWR! YOUR MOVE PUNY HUMAN!
+c l - i k i l f 
+p p p w p p p p 
+- - - - - - - - 
+- - - - p - - - 
+- - - P - - - P 
+- - - - - - - - 
+P P P P - P - - 
+F L I W K I L C 
+BLACK's move
+
+Time used in makeMove: 0.4438 seconds out of  0.5
+Within the time limit -- nice!
+Turn 10: Move is by BLACK to -47646
+SmartBC says: Ha! Take that!
+c l - i k i l f 
+p p p w p p p p 
+- - - - - - - - 
+p - - - - - - - 
+- - - P - - - P 
+- - - - - - - - 
+P P P P - P - - 
+F L I W K I L C 
+WHITE's move
+
+Time used in makeMove: 0.4008 seconds out of  0.5
+Within the time limit -- nice!
+Turn 11: Move is by WHITE to 
+Tanimotosaurus says: RAWR! YOUR MOVE PUNY HUMAN!
+c l - i k i l f 
+p p p w p p p p 
+- - - - - - - - 
+p - - - - - - - 
+- - - - - - P P 
+- - - - - - - - 
+P P P P - P - - 
+F L I W K I L C 
+BLACK's move
+
+Time used in makeMove: 0.4441 seconds out of  0.5
+Within the time limit -- nice!
+Turn 12: Move is by BLACK to -48446
+SmartBC says: Ha! Take that!
+c - l i k i l f 
+p p p w p p p p 
+- - - - - - - - 
+p - - - - - - - 
+- - - - - - P P 
+- - - - - - - - 
+P P P P - P - - 
+F L I W K I L C 
+WHITE's move
+
+Time used in makeMove: 0.3986 seconds out of  0.5
+Within the time limit -- nice!
+Turn 13: Move is by WHITE to 
+Tanimotosaurus says: RAWR! YOUR MOVE PUNY HUMAN!
+c - l i k i l f 
+p p p w p p p p 
+- - P - - - - - 
+p - - - - - - - 
+- - - - - - P P 
+- - - - - - - - 
+P P - P - P - - 
+F L I W K I L C 
+BLACK's move
+
+Time used in makeMove: 0.4442 seconds out of  0.5
+Within the time limit -- nice!
+Turn 14: Move is by BLACK to -43864
+SmartBC says: Ha! Take that!
+c - l i k i l f 
+p p p w p p p p 
+- - - - - - - - 
+- - p - - - - - 
+- - - - - - P P 
+- - - - - - - - 
+P P - P - P - - 
+F L I W K I L C 
+WHITE's move
+
+Time used in makeMove: 0.4063 seconds out of  0.5
+Within the time limit -- nice!
+Turn 15: Move is by WHITE to 
+Tanimotosaurus says: RAWR! YOUR MOVE PUNY HUMAN!
+c - l i k i l f 
+p p p w p p p p 
+- - - - - - - - 
+- - p - - - - - 
+- - - - - - P P 
+- - - - - - - - 
+P P - P - P - C 
+F L I W K I L - 
+BLACK's move
+
+Time used in makeMove: 0.4440 seconds out of  0.5
+Within the time limit -- nice!
+Turn 16: Move is by BLACK to -43862
+SmartBC says: Ha! Take that!
+- c l i k i l f 
+p p p w p p p p 
+- - - - - - - - 
+- - p - - - - - 
+- - - - - - P P 
+- - - - - - - - 
+P P - P - P - C 
+F L I W K I L - 
+WHITE's move
+
+Time used in makeMove: 0.4109 seconds out of  0.5
+Within the time limit -- nice!
+Turn 17: Move is by WHITE to 
+Tanimotosaurus says: RAWR! YOUR MOVE PUNY HUMAN!
+- c l i k i l f 
+p p p w p p p p 
+- - - - - - - - 
+- - p - - - - - 
+- - - - - - P - 
+- - - - - - - P 
+P P - P - P - C 
+F L I W K I L - 
+BLACK's move
+
+Time used in makeMove: 0.4439 seconds out of  0.5
+Within the time limit -- nice!
+Turn 18: Move is by BLACK to -46062
+SmartBC says: Ha! Take that!
+c - l i k i l f 
+p p p w p p p p 
+- - - - - - - - 
+- - p - - - - - 
+- - - - - - P - 
+- - - - - - - P 
+P P - P - P - C 
+F L I W K I L - 
+WHITE's move
+
+Time used in makeMove: 0.4220 seconds out of  0.5
+Within the time limit -- nice!
+Turn 19: Move is by WHITE to 
+Tanimotosaurus says: RAWR! YOUR MOVE PUNY HUMAN!
+c - l i k i l f 
+p p p w p p p p 
+- - - - - - - - 
+- - p - - - - - 
+- - - - - - P - 
+- - P - - - - - 
+P P - P - P - C 
+F L I W K I L - 
+BLACK's move
+
+Time used in makeMove: 0.4440 seconds out of  0.5
+Within the time limit -- nice!
+Turn 20: Move is by BLACK to -44662
+SmartBC says: Ha! Take that!
+- c l i k i l f 
+p p p w p p p p 
+- - - - - - - - 
+- - p - - - - - 
+- - - - - - P - 
+- - P - - - - - 
+P P - P - P - C 
+F L I W K I L - 
+WHITE's move
+
+Time used in makeMove: 0.4825 seconds out of  0.5
+Within the time limit -- nice!
+Turn 21: Move is by WHITE to 
+Tanimotosaurus says: RAWR! YOUR MOVE PUNY HUMAN!
+- c l i k i l f 
+p p p w p p p p 
+- - - - - - - - 
+- - p - - - - - 
+- - - P - - P - 
+- - P - - - - - 
+P P - - - P - C 
+F L I W K I L - 
+BLACK's move
+
+Time used in makeMove: 0.4442 seconds out of  0.5
+Within the time limit -- nice!
+Turn 22: Move is by BLACK to -36260
+SmartBC says: Ha! Take that!
+- c l i k i l f 
+p p p w p p p p 
+- - - - - - - - 
+p - - - - - - - 
+- - - P - - P - 
+- - P - - - - - 
+P P - - - P - C 
+F L I W K I L - 
+WHITE's move
+
+Time used in makeMove: 0.4180 seconds out of  0.5
+Within the time limit -- nice!
+Turn 23: Move is by WHITE to 
+Tanimotosaurus says: RAWR! YOUR MOVE PUNY HUMAN!
+- c l i k i l f 
+p p p w p p p p 
+- - - - - - - - 
+p - - - - - - - 
+- - P P - - P - 
+- - - - - - - - 
+P P - - - P - C 
+F L I W K I L - 
+BLACK's move
+
+Time used in makeMove: 0.4439 seconds out of  0.5
+Within the time limit -- nice!
+Turn 24: Move is by BLACK to -35460
+SmartBC says: Ha! Take that!
+c - l i k i l f 
+p p p w p p p p 
+- - - - - - - - 
+p - - - - - - - 
+- - P P - - P - 
+- - - - - - - - 
+P P - - - P - C 
+F L I W K I L - 
+WHITE's move
+
+Time used in makeMove: 0.4158 seconds out of  0.5
+Within the time limit -- nice!
+Turn 25: Move is by WHITE to 
+Tanimotosaurus says: RAWR! YOUR MOVE PUNY HUMAN!
+c - l i k i l f 
+p p p w p p p p 
+- - - - - - - - 
+p - - - - - - - 
+- - P P - - P - 
+- - - - - P - - 
+P P - - - - - C 
+F L I W K I L - 
+BLACK's move
+
+Time used in makeMove: 0.4439 seconds out of  0.5
+Within the time limit -- nice!
+Turn 26: Move is by BLACK to -27858
+SmartBC says: Ha! Take that!
+- c l i k i l f 
+p p p w p p p p 
+- - - - - - - - 
+p - - - - - - - 
+- - P P - - P - 
+- - - - - P - - 
+P P - - - - - C 
+F L I W K I L - 
+WHITE's move
+
+Time used in makeMove: 0.4145 seconds out of  0.5
+Within the time limit -- nice!
+Turn 27: Move is by WHITE to 
+Tanimotosaurus says: RAWR! YOUR MOVE PUNY HUMAN!
+- c l i k i l f 
+p p p w p p p p 
+- - - - - P - - 
+p - - - - - - - 
+- - P P - - P - 
+- - - - - - - - 
+P P - - - - - C 
+F L I W K I L - 
+BLACK's move
+
+Time used in makeMove: 0.4447 seconds out of  0.5
+Within the time limit -- nice!
+Turn 28: Move is by BLACK to -26678
+SmartBC says: Ha! Take that!
+- c l i k i l f 
+p p p w p p p p 
+- - - - - - - - 
+- - - - - p - - 
+- - P P - - P - 
+- - - - - - - - 
+P P - - - - - C 
+F L I W K I L - 
+WHITE's move
+
+Time used in makeMove: 0.4250 seconds out of  0.5
+Within the time limit -- nice!
+Turn 29: Move is by WHITE to 
+Tanimotosaurus says: RAWR! YOUR MOVE PUNY HUMAN!
+- c l i k i l f 
+p p p w p p p p 
+- - - - - - - - 
+- - - - - p - - 
+- - P P - - P - 
+- - - - - - - - 
+P P - - - I - C 
+F L I W K - L - 
+BLACK's move
+
+Time used in makeMove: 0.4472 seconds out of  0.5
+Within the time limit -- nice!
+Turn 30: Move is by BLACK to -27076
+SmartBC says: Ha! Take that!
+- c l i k i l f 
+p p p w p p p p 
+- - - - - - - - 
+p - - - - - - - 
+- - P P - - P - 
+- - - - - - - - 
+P P - - - I - C 
+F L I W K - L - 
+WHITE's move
+
+Time used in makeMove: 0.4186 seconds out of  0.5
+Within the time limit -- nice!
+Turn 31: Move is by WHITE to 
+Tanimotosaurus says: RAWR! YOUR MOVE PUNY HUMAN!
+- c l i k i l f 
+p p p w p p p p 
+- - - - - - - - 
+p - - - - - - - 
+- - P P - - P - 
+- - - - - - - - 
+P P - - - I C - 
+F L I W K - L - 
+BLACK's move
+
+Time used in makeMove: 0.4438 seconds out of  0.5
+Within the time limit -- nice!
+Turn 32: Move is by BLACK to -29476
+SmartBC says: Ha! Take that!
+c - l i k i l f 
+p p p w p p p p 
+- - - - - - - - 
+p - - - - - - - 
+- - P P - - P - 
+- - - - - - - - 
+P P - - - I C - 
+F L I W K - L - 
+WHITE's move
+
+Time used in makeMove: 0.4469 seconds out of  0.5
+Within the time limit -- nice!
+Turn 33: Move is by WHITE to 
+Tanimotosaurus says: RAWR! YOUR MOVE PUNY HUMAN!
+c - l i k i l f 
+p p p w p p p p 
+- - - - - - - - 
+p - - - - - - - 
+- - P P - - P - 
+- - - - - - C - 
+P P - - - I - - 
+F L I W K - L - 
+BLACK's move
+
+Time used in makeMove: 0.4452 seconds out of  0.5
+Within the time limit -- nice!
+Turn 34: Move is by BLACK to -29276
+SmartBC says: Ha! Take that!
+- c l i k i l f 
+p p p w p p p p 
+- - - - - - - - 
+p - - - - - - - 
+- - P P - - P - 
+- - - - - - C - 
+P P - - - I - - 
+F L I W K - L - 
+WHITE's move
+
+Time used in makeMove: 0.4083 seconds out of  0.5
+Within the time limit -- nice!
+Turn 35: Move is by WHITE to 
+Tanimotosaurus says: RAWR! YOUR MOVE PUNY HUMAN!
+- c l i k i l f 
+p p p w p p p p 
+- - - - - - P - 
+p - - - - - - - 
+- - P P - - - - 
+- - - - - - C - 
+P P - - - I - - 
+F L I W K - L - 
+BLACK's move
+
+Time used in makeMove: 0.4444 seconds out of  0.5
+Within the time limit -- nice!
+Turn 36: Move is by BLACK to -27096
+SmartBC says: Ha! Take that!
+- c l i k i l f 
+p p p w p p p p 
+- - - - - - - - 
+- - - - - - p - 
+- - P P - - - - 
+- - - - - - C - 
+P P - - - I - - 
+F L I W K - L - 
+WHITE's move
+
+Time used in makeMove: 0.4147 seconds out of  0.5
+Within the time limit -- nice!
+Turn 37: Move is by WHITE to 
+Tanimotosaurus says: RAWR! YOUR MOVE PUNY HUMAN!
+- c l i k i l f 
+p p p w p p p p 
+- - - - - - - - 
+- - - - - - p - 
+- - P P - - - - 
+- - - - - - C - 
+P P - - - - - - 
+F L I W K I L - 
+BLACK's move
+
+Time used in makeMove: 0.4439 seconds out of  0.5
+Within the time limit -- nice!
+Turn 38: Move is by BLACK to -24698
+SmartBC says: Ha! Take that!
+c - l i k i l f 
+p p p w p p p p 
+- - - - - - - - 
+- - - - - - p - 
+- - P P - - - - 
+- - - - - - C - 
+P P - - - - - - 
+F L I W K I L - 
+WHITE's move
+
+Time used in makeMove: 0.4165 seconds out of  0.5
+Within the time limit -- nice!
+Turn 39: Move is by WHITE to 
+Tanimotosaurus says: RAWR! YOUR MOVE PUNY HUMAN!
+c - l i k i l f 
+p p p w p p p p 
+- - - - - - - - 
+- - - - - - p - 
+- - P P - I - - 
+- - - - - - C - 
+P P - - - - - - 
+F L I W K - L - 
+BLACK's move
+
+Time used in makeMove: 0.4441 seconds out of  0.5
+Within the time limit -- nice!
+Turn 40: Move is by BLACK to -19296
+SmartBC says: Ha! Take that!
+c - l i k i l f 
+p p p w p p p p 
+- - - - - - - - 
+p - - - - - - - 
+- - P P - I - - 
+- - - - - - C - 
+P P - - - - - - 
+F L I W K - L - 
+WHITE's move
+
+Time used in makeMove: 0.4096 seconds out of  0.5
+Within the time limit -- nice!
+Turn 41: Move is by WHITE to 
+Tanimotosaurus says: RAWR! YOUR MOVE PUNY HUMAN!
+c - l i k i l f 
+p p p w p p p p 
+- - - - - - - - 
+p - - - - - - - 
+- - P P - - I - 
+- - - - - - C - 
+P P - - - - - - 
+F L I W K - L - 
+BLACK's move
+
+Time used in makeMove: 0.4445 seconds out of  0.5
+Within the time limit -- nice!
+Turn 42: Move is by BLACK to -19296
+SmartBC says: Ha! Take that!
+- c l i k i l f 
+p p p w p p p p 
+- - - - - - - - 
+p - - - - - - - 
+- - P P - - I - 
+- - - - - - C - 
+P P - - - - - - 
+F L I W K - L - 
+WHITE's move
+
+Time used in makeMove: 0.4299 seconds out of  0.5
+Within the time limit -- nice!
+Turn 43: Move is by WHITE to 
+Tanimotosaurus says: RAWR! YOUR MOVE PUNY HUMAN!
+- c l i k i l f 
+p p p w p p p p 
+- - - - - - - - 
+p - - - - - - - 
+- - P P - - I - 
+- - - - - - - C 
+P P - - - - - - 
+F L I W K - L - 
+BLACK's move
+
+Time used in makeMove: 0.4450 seconds out of  0.5
+Within the time limit -- nice!
+Turn 44: Move is by BLACK to -19296
+SmartBC says: Ha! Take that!
+c - l i k i l f 
+p p p w p p p p 
+- - - - - - - - 
+p - - - - - - - 
+- - P P - - I - 
+- - - - - - - C 
+P P - - - - - - 
+F L I W K - L - 
+WHITE's move
+
+Time used in makeMove: 0.4134 seconds out of  0.5
+Within the time limit -- nice!
+Turn 45: Move is by WHITE to 
+Tanimotosaurus says: RAWR! YOUR MOVE PUNY HUMAN!
+c - l i k i l f 
+p p p w p p p p 
+- - - - - - - - 
+p - - P - - - - 
+- - P - - - I - 
+- - - - - - - C 
+P P - - - - - - 
+F L I W K - L - 
+BLACK's move
+
+Time used in makeMove: 0.4451 seconds out of  0.5
+Within the time limit -- nice!
+Turn 46: Move is by BLACK to -19296
+SmartBC says: Ha! Take that!
+- c l i k i l f 
+p p p w p p p p 
+- - - - - - - - 
+p - - P - - - - 
+- - P - - - I - 
+- - - - - - - C 
+P P - - - - - - 
+F L I W K - L - 
+WHITE's move
+
+Time used in makeMove: 0.4059 seconds out of  0.5
+Within the time limit -- nice!
+Turn 47: Move is by WHITE to 
+Tanimotosaurus says: RAWR! YOUR MOVE PUNY HUMAN!
+- c l i k i l f 
+p p p w p p p p 
+- - - - - - - - 
+p - - P - - - - 
+- - P - - - I - 
+- - - W - - - C 
+P P - - - - - - 
+F L I - K - L - 
+BLACK's move
+
+Time used in makeMove: 0.4441 seconds out of  0.5
+Within the time limit -- nice!
+Turn 48: Move is by BLACK to -12494
+SmartBC says: Ha! Take that!
+c - l i k i l f 
+p p p w p p p p 
+- - - - - - - - 
+p - - P - - - - 
+- - P - - - I - 
+- - - W - - - C 
+P P - - - - - - 
+F L I - K - L - 
+WHITE's move
+
+Time used in makeMove: 0.4047 seconds out of  0.5
+Within the time limit -- nice!
+Turn 49: Move is by WHITE to 
+Tanimotosaurus says: RAWR! YOUR MOVE PUNY HUMAN!
+c - l i k i l f 
+p p p w p p p p 
+- - - - - - - - 
+p - - - - P - - 
+- - P - - - I - 
+- - - W - - - C 
+P P - - - - - - 
+F L I - K - L - 
+BLACK's move
+
+Time used in makeMove: 0.4442 seconds out of  0.5
+Within the time limit -- nice!
+Turn 50: Move is by BLACK to -12694
+SmartBC says: Ha! Take that!
+- c l i k i l f 
+p p p w p p p p 
+- - - - - - - - 
+p - - - - P - - 
+- - P - - - I - 
+- - - W - - - C 
+P P - - - - - - 
+F L I - K - L - 
+WHITE's move
+
+Time used in makeMove: 0.4044 seconds out of  0.5
+Within the time limit -- nice!
+Turn 51: Move is by WHITE to 
+Tanimotosaurus says: RAWR! YOUR MOVE PUNY HUMAN!
+- c l i k i l f 
+p p p w p p p p 
+- - - - - - - - 
+p - - - - P - - 
+- - P - - - I - 
+- - - W - - - - 
+P P - - - - - - 
+F L I - - - L C 
+BLACK's move
+
+Win for BLACK
+D-173-250-142-84:assign5 Ryan$ 

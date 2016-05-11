@@ -1,6 +1,9 @@
 from random import *
 
-# Immobilized Pieces
+# Ryan Chui, Megh Vakharia
+# Assignment 5 
+# Tanimoto
+# CSE 415
 
 BLACK = 0
 WHITE = 1
@@ -496,7 +499,6 @@ def makeMove(currentState, currentRemark, timeLimit = 10000):
     import random
     next_move = random.choice(first_moves)
     NEW_MOVE = BC_state(next_move, player_move)
-    print (pretty_print_state(next_move))
   else:
     NEW_MOVE = BC_state(first_moves[index], player_move)
 
