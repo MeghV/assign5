@@ -103,11 +103,11 @@ def is_opponent(piece_id):
   if piece_id != 0:
     if PLAYER == 1:
       if piece_id % 2 == 0:
-        return True
+        return False
     else:
       if piece_id % 2 != 0:
-        return True
-  return False
+        return False
+  return True
 
 def find_king(new):
   row = -1
@@ -139,35 +139,42 @@ def leaper_kill(new, from_row, from_column, to_row, to_column, hold):
     if to_row + 2 < 8 and new[to_row + 2][to_column] == 0:
       new[to_row + 1][to_column] = 0
       new[to_row + 2][to_column] = hold
+      new[to_row][to_column] = 0
   elif to_row - 1 >= 0 and is_opponent(new[to_row - 1][to_column]) and (from_column == to_column):
     if to_row - 2 >= 0 and new[to_row - 2][to_column] == 0:
       new[to_row - 1][to_column] = 0
       new[to_row - 2][to_column] = hold
+      new[to_row][to_column] = 0
   elif to_column + 1 < 8 and is_opponent(new[to_row][to_column + 1]) and (from_row == to_row):
     if to_column + 2 < 8 and new[to_row][to_column + 2] == 0:
       new[to_row][to_column + 1] = 0
       new[to_row][to_column + 2] = hold
+      new[to_row][to_column] = 0
   elif to_column - 1 >= 0 and is_opponent(new[to_row][to_column - 1]) and (from_row == to_row):
     if to_column - 2 >= 0 and new[to_row][to_column - 2] == 0:
       new[to_row][to_column - 1] = 0
       new[to_row][to_column - 2] = hold
+      new[to_row][to_column] = 0
   elif to_row + 1 < 8 and to_column + 1 < 8 and is_opponent(new[to_row + 1][to_column + 1]) and (from_column < to_column) and (from_row < to_row):
     if to_row + 2 < 8 and to_column + 2 < 8 and new[to_row + 2][to_column + 2] == 0:
       new[to_row + 1][to_column + 1] = 0
       new[to_row + 2][to_column + 2] = hold
+      new[to_row][to_column] = 0
   elif to_row - 1 >= 0 and to_column - 1 >= 0 and is_opponent(new[to_row - 1][to_column - 1]) and (from_column > to_column) and (from_row > to_row):
     if to_row - 2 >= 0 and to_column - 2 >= 0 and new[to_row - 2][to_column - 2] == 0:
       new[to_row - 1][to_column - 1] = 0
       new[to_row - 2][to_column - 2] = hold
+      new[to_row][to_column] = 0
   elif to_row - 1 >= 0 and to_column + 1 < 8 and is_opponent(new[to_row - 1][to_column + 1]) and (from_column < to_column) and (from_row > to_row):
     if to_row - 2 >= 0 and to_column + 2 < 8 and new[to_row - 2][to_column + 2] == 0:
       new[to_row - 1][to_column + 1] = 0
       new[to_row - 2][to_column + 2] = hold
+      new[to_row][to_column] = 0
   elif to_row + 1 < 8 and to_column - 1 >= 0 and is_opponent(new[to_row + 1][to_column - 1]) and (from_column > to_column) and (from_row < to_row):
     if to_row + 2 < 8 and to_column - 2 >= 0 and new[to_row + 2][to_column - 2] == 0:
       new[to_row + 1][to_column - 1] = 0
       new[to_row + 2][to_column - 2] = hold
-  new[to_row][to_column] = 0
+      new[to_row][to_column] = 0
 
 def coordinator_kill(new, from_row, from_column, to_row, to_column, hold):
   (king_row, king_column) = find_king(new)
@@ -177,82 +184,86 @@ def coordinator_kill(new, from_row, from_column, to_row, to_column, hold):
     new[to_row][king_column] = 0
 
 def withdrawer_kill(new, from_row, from_column, to_row, to_column, hold):
-  print (from_row + 1)
-  print (from_column)
-  print (is_opponent(new[from_row + 1][from_column]))
-  print (to_row + 1 < 8 and is_opponent(new[from_row + 1][from_column]) and (from_column == to_column))
-  if to_row + 1 < 8 and is_opponent(new[from_row + 1][from_column]) and (from_column == to_column):
-    new[from_row + 1][from_column] = 0
-  elif to_row - 1 >= 0 and is_opponent(new[from_row - 1][from_column]) and (from_column == to_column):
-    new[from_row - 1][from_column] = 0
-  elif to_column + 1 < 8 and is_opponent(new[from_row][from_column + 1]) and (from_row == to_row):
-    new[from_row][from_column + 1] = 0
-  elif to_column - 1 >= 0 and is_opponent(new[from_row][from_column - 1]) and (from_row == to_row):
-    new[from_row][from_column - 1] = 0
-  elif to_column + 1 < 8 and to_row + 1 < 8 and is_opponent(new[from_row + 1][from_column + 1]) and (from_column > to_column) and (from_row > to_row):
-    new[from_row + 1][from_column + 1] = 0
-  elif to_column - 1 >= 0 and to_row + 1 < 8 and is_opponent(new[from_row + 1][from_column - 1]) and (from_column > to_column) and (from_row < to_row):
-    new[from_row + 1][from_column - 1] = 0
-  elif to_column + 1 < 8 and to_row - 1 < 8 and is_opponent(new[from_row - 1][from_column + 1]) and (from_column < to_column) and (from_row > to_row):
-    new[from_row - 1][from_column + 1] = 0
-  elif to_column - 1 < 8 and to_row - 1 < 8 and is_opponent(new[from_row - 1][from_column - 1]) and (from_column < to_column) and (from_row < to_row):
-    new[from_row - 1][from_column - 1] = 0
+  if from_row + 1 < 8:
+    if is_opponent(new[from_row + 1][from_column]) and (from_column == to_column):
+      new[from_row + 1][from_column] = 0
+  if from_row - 1 >= 0:
+    if is_opponent(new[from_row - 1][from_column]) and (from_column == to_column):
+      new[from_row - 1][from_column] = 0
+  if from_column + 1 < 8:
+    if is_opponent(new[from_row][from_column + 1]) and (from_row == to_row):
+     new[from_row][from_column + 1] = 0
+  if from_column - 1 >= 0:
+    if is_opponent(new[from_row][from_column - 1]) and (from_row == to_row):
+     new[from_row][from_column - 1] = 0
+  if from_column + 1 < 8:
+    if from_row + 1 < 8 and is_opponent(new[from_row + 1][from_column + 1]) and (from_column > to_column) and (from_row > to_row):
+     new[from_row + 1][from_column + 1] = 0
+  if from_column - 1 >= 0 and from_row + 1 < 8:
+    if is_opponent(new[from_row + 1][from_column - 1]) and (from_column > to_column) and (from_row < to_row):
+      new[from_row + 1][from_column - 1] = 0
+  if from_column + 1 < 8 and from_row - 1 < 8:
+    if is_opponent(new[from_row - 1][from_column + 1]) and (from_column < to_column) and (from_row > to_row):
+      new[from_row - 1][from_column + 1] = 0
+  if from_column - 1 < 8 and from_row - 1 < 8:
+    if is_opponent(new[from_row - 1][from_column - 1]) and (from_column < to_column) and (from_row < to_row):
+     new[from_row - 1][from_column - 1] = 0
 
 def imitator_kill(new, from_row, from_column, to_row, to_column, hold):
   if to_row + 1 < 8 and is_opponent(new[to_row + 1][to_column]):
     if new[to_row + 1][to_column] in [2, 3]:
       pincer_kill(new, from_row, from_column, to_row, to_column, hold)
     elif new[to_row + 1][to_column] in [4, 5]:
-      coordinator_kill()
+      coordinator_kill(new, from_row, from_column, to_row, to_column, hold)
     elif new[to_row + 1][to_column] in [6, 7]:
       leaper_kill(new, from_row, from_column, to_row, to_column, hold)
   elif to_row - 1 >= 0 and is_opponent(new[to_row - 1][to_column]):
     if new[to_row - 1][to_column] in [2, 3]:
       pincer_kill(new, from_row, from_column, to_row, to_column, hold)
     elif new[to_row - 1][to_column] in [4, 5]:
-      coordinator_kill()
+      coordinator_kill(new, from_row, from_column, to_row, to_column, hold)
     elif new[to_row - 1][to_column] in [6, 7]:
       leaper_kill(new, from_row, from_column, to_row, to_column, hold)
   elif to_column + 1 < 8 and is_opponent(new[to_row][to_column + 1]):
     if new[to_row][to_column + 1] in [2, 3]:
       pincer_kill(new, from_row, from_column, to_row, to_column, hold)
     elif new[to_row][to_column + 1] in [4, 5]:
-      coordinator_kill()
+      coordinator_kill(new, from_row, from_column, to_row, to_column, hold)
     elif new[to_row][to_column + 1] in [6, 7]:
       leaper_kill(new, from_row, from_column, to_row, to_column, hold)
   elif to_column - 1 >= 0 and is_opponent(new[to_row][to_column - 1]):
     if new[to_row][to_column - 1] in [2, 3]:
       pincer_kill(new, from_row, from_column, to_row, to_column, hold)
     elif new[to_row][to_column - 1] in [4, 5]:
-      coordinator_kill()
+      coordinator_kill(new, from_row, from_column, to_row, to_column, hold)
     elif new[to_row][to_column - 1] in [6, 7]:
       leaper_kill(new, from_row, from_column, to_row, to_column, hold)
   elif to_row + 1 < 8 and to_column + 1 < 8 and is_opponent(new[to_row + 1][to_column + 1]):
     if new[to_row + 1][to_column + 1] in [2, 3]:
       pincer_kill(new, from_row, from_column, to_row, to_column, hold)
     elif new[to_row + 1][to_column + 1] in [4, 5]:
-      coordinator_kill()
+      coordinator_kill(new, from_row, from_column, to_row, to_column, hold)
     elif new[to_row + 1][to_column + 1] in [6, 7]:
       leaper_kill(new, from_row, from_column, to_row, to_column, hold)
   elif to_row - 1 >= 0 and to_column - 1 >= 0 and is_opponent(new[to_row - 1][to_column - 1]):
     if new[to_row - 1][to_column - 1] in [2, 3]:
       pincer_kill(new, from_row, from_column, to_row, to_column, hold)
     elif new[to_row - 1][to_column - 1] in [4, 5]:
-      coordinator_kill()
+      coordinator_kill(new, from_row, from_column, to_row, to_column, hold)
     elif new[to_row - 1][to_column - 1] in [6, 7]:
       leaper_kill(new, from_row, from_column, to_row, to_column, hold)
   elif to_row - 1 >= 0 and to_column + 1 < 8 and is_opponent(new[to_row - 1][to_column + 1]):
     if new[to_row - 1][to_column + 1] in [2, 3]:
       pincer_kill(new, from_row, from_column, to_row, to_column, hold)
     elif new[to_row - 1][to_column + 1] in [4, 5]:
-      coordinator_kill()
+      coordinator_kill(new, from_row, from_column, to_row, to_column, hold)
     elif new[to_row - 1][to_column + 1] in [6, 7]:
       leaper_kill(new, from_row, from_column, to_row, to_column, hold)
   elif to_row + 1 < 8 and to_column - 1 >= 0 and is_opponent(new[to_row + 1][to_column - 1]):
     if new[to_row + 1][to_column - 1] in [2, 3]:
       pincer_kill(new, from_row, from_column, to_row, to_column, hold)
     elif new[to_row + 1][to_column - 1] in [4, 5]:
-      coordinator_kill()
+      coordinator_kill(new, from_row, from_column, to_row, to_column, hold)
     elif new[to_row + 1][to_column - 1] in [6, 7]:
       leaper_kill(new, from_row, from_column, to_row, to_column, hold)
 
@@ -283,19 +294,14 @@ def imitator_kill(new, from_row, from_column, to_row, to_column, hold):
 
 def remove_piece(new, from_row, from_column, to_row, to_column, hold):
   if hold in [2, 3]:
-    print ("pincer_kill")
     pincer_kill(new, from_row, from_column, to_row, to_column, hold)
   elif hold in [4, 5]:
-    print ("coordinator_kill")
-    coordinator_kill()
+    coordinator_kill(new, from_row, from_column, to_row, to_column, hold)
   elif hold in [6, 7]:
-    print ("leaper_kill")
     leaper_kill(new, from_row, from_column, to_row, to_column, hold)
   elif hold in [8, 9]:
-    print ("imitator_kill")
     imitator_kill(new, from_row, from_column, to_row, to_column, hold)
   elif hold in [10, 11]:
-    print ("withdrawer_kill")
     withdrawer_kill(new, from_row, from_column, to_row, to_column, hold)
   return new
 
@@ -343,30 +349,39 @@ def clear_path_diagonal(s, from_row, from_column, to_row, to_column):
 # Checks that there are empty spaces around the piece.
 def can_move(s, from_row, from_column, to_row, to_column):
   global PLAYER
-  if PLAYER == 1:
-    if s[from_row][from_column] % 2 == 0:
-      return False
-  else:
-    if s[from_row][from_column] % 2 != 0:
-      return False
-  if not ((from_row != to_row) and (from_column != to_column)):
-    if s[from_row][from_column] in [12, 13]:
-      if (abs(from_row - to_row) <= 1) and (abs(from_column - to_column) <= 1):
-        if is_opponent(s[to_row][to_column]):
-          return True
-      return False
-  if s[to_row][to_column] == 0 and not ((from_row != to_row) and (from_column != to_column)):
-    # print ("can_move", from_row, from_column, to_row, to_column)
-    if (from_row == to_row):
-      if clear_path_horizontal(s, from_row, from_column, to_row, to_column):
-        return True
-    elif (from_column == to_column):
-      if clear_path_vertical(s, from_row, from_column, to_row, to_column):
-        return True
-    elif s[from_row][from_column] not in [2, 3]:
-      if (abs(from_row - to_row) == abs(from_column - to_column)):
-        if clear_path_diagonal(s, from_row, from_column, to_row, to_column):
-          return True
+  if s[from_row][from_column] != 0:
+    if not((from_row + 1 < 8 and from_column + 1 < 8 and s[from_row + 1][from_column + 1] in [14, 15]) or 
+       (from_row + 1 < 8 and from_column - 1 >= 0 and s[from_row + 1][from_column - 1] in [14, 15]) or 
+       (from_row - 1 >= 0 and from_column - 1 >= 0 and s[from_row - 1][from_column - 1] in [14, 15]) or 
+       (from_row - 1 >= 0 and from_column + 1 < 8 and s[from_row - 1][from_column + 1] in [14, 15]) or 
+       (from_row + 1 < 8 and s[from_row + 1][from_column] in [14, 15]) or 
+       (from_row - 1 >= 0 and s[from_row - 1][from_column] in [14, 15]) or 
+       (from_column + 1 < 8 and s[from_row][from_column + 1] in [14, 15]) or
+       (from_column - 1 >= 0 and s[from_row][from_column - 1] in [14, 15])):
+      if PLAYER == 1:
+        if s[from_row][from_column] % 2 == 0:
+          return False
+      else:
+        if s[from_row][from_column] % 2 != 0:
+          return False
+      if not ((from_row != to_row) and (from_column != to_column)):
+        if s[from_row][from_column] in [12, 13]:
+          if (abs(from_row - to_row) <= 1) and (abs(from_column - to_column) <= 1):
+            if is_opponent(s[to_row][to_column]):
+              return True
+          return False
+      if s[to_row][to_column] == 0 and not ((from_row != to_row) and (from_column != to_column)):
+        # print ("can_move", from_row, from_column, to_row, to_column)
+        if (from_row == to_row):
+          if clear_path_horizontal(s, from_row, from_column, to_row, to_column):
+            return True
+        elif (from_column == to_column):
+          if clear_path_vertical(s, from_row, from_column, to_row, to_column):
+            return True
+        elif s[from_row][from_column] not in [2, 3]:
+          if (abs(from_row - to_row) == abs(from_column - to_column)):
+            if clear_path_diagonal(s, from_row, from_column, to_row, to_column):
+              return True
   return False
 
 # print can_move(INITIAL, 2, 0, 3, 0)
